@@ -1,0 +1,136 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nobre+ | Detalhes do Filme</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css?v=2">
+</head>
+<body class="detail-page-body">
+
+    <!-- NAVEGAÃ‡ÃƒO SUPERIOR -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <a href="index.html" class="logo-link"><h2 class="logo">Nobre+</h2></a>
+            <ul class="nav-links">
+                <li><a href="index.html"><i class="fa-solid fa-house"></i> HOME</a></li>
+                <li><a href="#"><i class="fa-solid fa-magnifying-glass"></i> PESQUISA</a></li>
+                <li><a href="#"><i class="fa-solid fa-plus"></i> MINHA LISTA</a></li>
+                <li><a href="#"><i class="fa-solid fa-film"></i> FILMES</a></li>
+                <li><a href="#"><i class="fa-solid fa-tv"></i> SÃ‰RIES</a></li>
+                <li><a href="#"><i class="fa-solid fa-star"></i> ORIGINAIS</a></li>
+            </ul>
+        </div>
+        <div class="nav-right">
+            <a href="index.html" class="back-home-btn"><i class="fa-solid fa-arrow-left"></i> Voltar ao InÃ­cio</a>
+            <img src="" alt="Perfil" class="profile-avatar" id="detailAvatar">
+        </div>
+    </nav>
+
+    <!-- PÃGINA DE DETALHES -->
+    <main class="detail-main">
+        <!-- HERO BANNER FULLSCREEN -->
+        <section class="detail-hero-section">
+            <img src="images/logo1.jpg" alt="Banner do Filme" class="detail-hero-bg" id="detailHeroImg">
+            <div class="detail-hero-overlay"></div>
+            
+            <div class="detail-hero-content">
+                <span class="detail-badge-tag" id="detailBadgeTag">Trailer</span>
+                
+                <!-- Logo ou TÃ­tulo do Filme -->
+                <img src="images/logo2.png" alt="Logo do Filme" class="detail-movie-logo" id="detailMovieLogo">
+                <h1 class="detail-movie-title" id="detailMovieTitle" style="display: none;">Vingadores: Doutor Destino</h1>
+                
+                <p class="detail-tagline" id="detailTagline">Trailer da estreia no cinema jÃ¡ disponÃ­vel</p>
+                
+                <div class="detail-meta-row">
+                    <span class="badge-age r14" id="detailAgeBadge">14+</span>
+                    <span class="badge-res" id="detailResBadge">4K HDR</span>
+                    <span class="detail-genre" id="detailGenre">Super-HerÃ³is, AÃ§Ã£o e aventura</span>
+                </div>
+
+                <p class="detail-description" id="detailDescription">
+                    Prepare-se para "Vingadores: Doutor Destino" da Marvel Studios, em dezembro de 2026, sÃ³ nos cinemas.
+                </p>
+
+                <!-- BOTÃ•ES DE AÃ‡ÃƒO -->
+                <div class="detail-action-buttons">
+                    <button class="btn-play-trailer" id="detailPlayTrailerBtn">
+                        <i class="fa-solid fa-play"></i> TRAILER
+                    </button>
+                    <button class="btn-add-list" id="detailAddListBtn" title="Adicionar Ã  Minha Lista">
+                        <i class="fa-solid fa-plus"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÃ‡ÃƒO DE ABAS (SUGESTÃ•ES, EXTRAS, DETALHES) -->
+        <section class="detail-tabs-section">
+            <div class="detail-tabs-nav">
+                <button class="detail-tab-btn active" data-tab="sugestoes">SUGESTÃ•ES</button>
+                <button class="detail-tab-btn" data-tab="extras">EXTRAS</button>
+                <button class="detail-tab-btn" data-tab="detalhes">DETALHES</button>
+            </div>
+
+            <!-- CONTEÃšDO DAS ABAS -->
+            <div class="detail-tab-pane active" id="tab-sugestoes">
+                <div class="detail-suggestions-grid" id="detailSuggestionsGrid">
+                    <!-- Cards preenchidos dinamicamente por JS -->
+                </div>
+            </div>
+
+            <div class="detail-tab-pane" id="tab-extras">
+                <div class="detail-extras-empty">
+                    <i class="fa-solid fa-film"></i>
+                    <p>Nenhum extra ou cena de bastidores disponÃ­vel no momento.</p>
+                </div>
+            </div>
+
+            <div class="detail-tab-pane" id="tab-detalhes">
+                <div class="detail-info-grid">
+                    <div class="info-card">
+                        <h4>DuraÃ§Ã£o</h4>
+                        <p id="detailDuration">2h 45min</p>
+                    </div>
+                    <div class="info-card">
+                        <h4>Data de LanÃ§amento</h4>
+                        <p id="detailRelease">Dezembro de 2026</p>
+                    </div>
+                    <div class="info-card">
+                        <h4>GÃªnero</h4>
+                        <p id="detailGenreFull">AÃ§Ã£o, Aventura, FicÃ§Ã£o CientÃ­fica</p>
+                    </div>
+                    <div class="info-card">
+                        <h4>DireÃ§Ã£o</h4>
+                        <p id="detailDirector">Anthony e Joe Russo</p>
+                    </div>
+                    <div class="info-card">
+                        <h4>Elenco Principal</h4>
+                        <p id="detailCast">Robert Downey Jr., Pedro Pascal, Vanessa Kirby, Benedict Cumberbatch</p>
+                    </div>
+                    <div class="info-card">
+                        <h4>ClassificaÃ§Ã£o Indicativa</h4>
+                        <p id="detailRating">14 anos</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- MODAL DE VÃDEO DO TRAILER FULLSCREEN -->
+    <div class="trailer-modal" id="trailerModal">
+        <div class="trailer-modal-content">
+            <button class="trailer-close-btn" id="trailerCloseBtn" aria-label="Fechar"><i class="fa-solid fa-xmark"></i></button>
+            <div class="trailer-video-wrapper" id="trailerVideoWrapper"></div>
+        </div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="movies-data.js"></script>
+    <script src="database.js"></script>
+    <script src="detalhes.js"></script>
+</body>
+</html>
+

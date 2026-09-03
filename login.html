@@ -1,0 +1,182 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nobre+ | Entrar</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css?v=2">
+</head>
+<body class="login-body">
+
+    <div class="login-wrapper">
+        <div class="login-backdrop"></div>
+
+        <div class="login-card">
+            <div class="login-header">
+                <h1 class="login-logo">Nobre<span class="login-plus">+</span></h1>
+                <p class="login-subtitle">Bem-vindo de volta</p>
+            </div>
+
+            <!-- FORMULÃRIO DE LOGIN -->
+            <form id="loginForm" class="login-form active">
+                <div class="login-form-group">
+                    <label for="loginEmail">E-mail</label>
+                    <div class="login-input-wrap">
+                        <i class="fa-solid fa-envelope"></i>
+                        <input type="email" id="loginEmail" placeholder="seu@email.com" required autocomplete="email">
+                    </div>
+                </div>
+
+                <div class="login-form-group">
+                    <label for="loginPassword">Senha</label>
+                    <div class="login-input-wrap">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" id="loginPassword" placeholder="Sua senha" required autocomplete="current-password">
+                        <button type="button" class="toggle-password" aria-label="Mostrar senha">
+                            <i class="fa-solid fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="loginError" class="login-error"></div>
+
+                <button type="submit" class="login-submit-btn">
+                    <i class="fa-solid fa-right-to-bracket"></i> Entrar
+                </button>
+
+                <p class="login-switch-text">
+                    NÃ£o tem uma conta?
+                    <button type="button" class="login-switch-btn" id="showRegister">Criar conta</button>
+                </p>
+            </form>
+
+            <!-- FORMULÃRIO DE CADASTRO -->
+            <form id="registerForm" class="login-form">
+                <div class="login-form-group">
+                    <label for="regUsername">Nome de usuÃ¡rio</label>
+                    <div class="login-input-wrap">
+                        <i class="fa-solid fa-user"></i>
+                        <input type="text" id="regUsername" placeholder="Seu nome" required minlength="3" autocomplete="username">
+                    </div>
+                </div>
+
+                <div class="login-form-group">
+                    <label for="regEmail">E-mail</label>
+                    <div class="login-input-wrap">
+                        <i class="fa-solid fa-envelope"></i>
+                        <input type="email" id="regEmail" placeholder="seu@email.com" required autocomplete="email">
+                    </div>
+                </div>
+
+                <div class="login-form-group">
+                    <label for="regPassword">Senha</label>
+                    <div class="login-input-wrap">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" id="regPassword" placeholder="Crie uma senha" required minlength="4" autocomplete="new-password">
+                        <button type="button" class="toggle-password" aria-label="Mostrar senha">
+                            <i class="fa-solid fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="registerError" class="login-error"></div>
+                <div id="registerSuccess" class="login-success"></div>
+
+                <button type="submit" class="login-submit-btn register-btn">
+                    <i class="fa-solid fa-user-plus"></i> Criar Conta
+                </button>
+
+                <p class="login-switch-text">
+                    JÃ¡ tem uma conta?
+                    <button type="button" class="login-switch-btn" id="showLogin">Fazer login</button>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <script src="database.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (DB.isLoggedIn()) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            const loginForm = document.getElementById('loginForm');
+            const registerForm = document.getElementById('registerForm');
+            const showRegisterBtn = document.getElementById('showRegister');
+            const showLoginBtn = document.getElementById('showLogin');
+
+            showRegisterBtn.addEventListener('click', () => {
+                loginForm.classList.remove('active');
+                registerForm.classList.add('active');
+                clearMessages();
+                document.querySelector('.login-subtitle').textContent = 'Crie sua conta';
+            });
+
+            showLoginBtn.addEventListener('click', () => {
+                registerForm.classList.remove('active');
+                loginForm.classList.add('active');
+                clearMessages();
+                document.querySelector('.login-subtitle').textContent = 'Bem-vindo de volta';
+            });
+
+            loginForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                clearMessages();
+                const email = document.getElementById('loginEmail').value.trim();
+                const password = document.getElementById('loginPassword').value;
+                const result = DB.login(email, password);
+                if (result.success) {
+                    window.location.href = 'index.html';
+                } else {
+                    document.getElementById('loginError').textContent = result.message;
+                }
+            });
+
+            registerForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                clearMessages();
+                const username = document.getElementById('regUsername').value.trim();
+                const email = document.getElementById('regEmail').value.trim();
+                const password = document.getElementById('regPassword').value;
+                const result = DB.register(username, email, password);
+                if (result.success) {
+                    document.getElementById('registerSuccess').textContent = result.message;
+                    setTimeout(() => {
+                        registerForm.classList.remove('active');
+                        loginForm.classList.add('active');
+                        document.querySelector('.login-subtitle').textContent = 'Bem-vindo de volta';
+                        document.getElementById('loginEmail').value = email;
+                        clearMessages();
+                    }, 1200);
+                } else {
+                    document.getElementById('registerError').textContent = result.message;
+                }
+            });
+
+            document.querySelectorAll('.toggle-password').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const input = btn.parentElement.querySelector('input');
+                    const icon = btn.querySelector('i');
+                    if (input.type === 'password') {
+                        input.type = 'text';
+                        icon.className = 'fa-solid fa-eye-slash';
+                    } else {
+                        input.type = 'password';
+                        icon.className = 'fa-solid fa-eye';
+                    }
+                });
+            });
+
+            function clearMessages() {
+                document.getElementById('loginError').textContent = '';
+                document.getElementById('registerError').textContent = '';
+                document.getElementById('registerSuccess').textContent = '';
+            }
+        });
+    </script>
+</body>
+</html>
+

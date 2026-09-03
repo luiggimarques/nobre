@@ -1,0 +1,72 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nobre+ | Star</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css?v=2">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="nav-left">
+            <a href="index.html" class="logo-link"><h2 class="logo">Nobre+</h2></a>
+        </div>
+        <div class="nav-right">
+            <img src="https://i.pinimg.com/736x/88/43/c1/8843c1bb59dcce43cd4c46b7e39220e2.jpg" alt="Perfil" class="profile-avatar">
+        </div>
+    </nav>
+
+    <main>
+        <section class="star-hero">
+            <div class="star-hero-bg"></div>
+            <div class="star-hero-content">
+                <h1 class="star-title">STAR</h1>
+                <p class="star-subtitle">ConteÃºdo adulto e original para todos os gostos, sÃ³ no Nobre+</p>
+                <a href="index.html" class="back-home-btn"><i class="fa-solid fa-arrow-left"></i> Voltar</a>
+            </div>
+        </section>
+
+        <section class="star-grid-section">
+            <h2>Todos os Filmes Star</h2>
+            <div class="star-movies-grid" id="starGrid"></div>
+        </section>
+    </main>
+
+    <script src="movies-data.js"></script>
+    <script src="database.js"></script>
+    <script>
+        if (!DB.isLoggedIn()) {
+            window.location.href = 'login.html';
+        }
+        const starKeys = [
+            "deadpool-e-wolverine",
+            "alien-romulus",
+            "o-reino-do-planeta-dos-macacos",
+            "free-guy",
+            "logan"
+        ];
+
+        const grid = document.getElementById('starGrid');
+
+        starKeys.forEach(key => {
+            const movie = moviesDatabase[key];
+            if (!movie) return;
+            const thumb = movie.thumb || movie.heroImg;
+            grid.innerHTML += `
+                <a href="detalhes.html?id=${key}" class="star-movie-card">
+                    <img src="${thumb}" alt="${movie.title}">
+                    <div class="star-card-overlay">
+                        <h4>${movie.title}</h4>
+                        <div class="card-meta">
+                            <span class="badge-age ${movie.ageClass || 'r12'}">${movie.age || 'L'}</span>
+                            <span class="badge-res">${movie.res || 'HD'}</span>
+                        </div>
+                    </div>
+                </a>`;
+        });
+    </script>
+</body>
+</html>
+

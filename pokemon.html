@@ -1,0 +1,75 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nobre+ | PokÃ©mon</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css?v=2">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="nav-left">
+            <a href="index.html" class="logo-link"><h2 class="logo">Nobre+</h2></a>
+        </div>
+        <div class="nav-right">
+            <img src="https://i.pinimg.com/736x/88/43/c1/8843c1bb59dcce43cd4c46b7e39220e2.jpg" alt="Perfil" class="profile-avatar">
+        </div>
+    </nav>
+
+    <main>
+        <section class="pokemon-hero">
+            <div class="pokemon-hero-bg">
+                <span class="poke-ball"></span>
+                <span class="poke-ball small"></span>
+            </div>
+            <div class="pokemon-hero-content">
+                <h1 class="pokemon-title">POKÃ‰MON</h1>
+                <p class="pokemon-subtitle">Gotta catch 'em all! Todos os filmes, sÃ³ no Nobre+</p>
+                <a href="index.html" class="back-home-btn"><i class="fa-solid fa-arrow-left"></i> Voltar</a>
+            </div>
+        </section>
+
+        <section class="pokemon-grid-section">
+            <h2>Todos os Filmes PokÃ©mon</h2>
+            <div class="pokemon-movies-grid" id="pokemonGrid"></div>
+        </section>
+    </main>
+
+    <script src="movies-data.js"></script>
+    <script src="database.js"></script>
+    <script>
+        if (!DB.isLoggedIn()) {
+            window.location.href = 'login.html';
+        }
+        const pokemonKeys = [
+            "pokemon-detective-pikachu",
+            "pokemon-os-pokemon-o-poder-de-todos",
+            "pokemon-mewtwo-strikes-back",
+            "pokemon-i-o-pikachu-e-o-pokemon-selvagem",
+            "pokemon-movie-mewtwo-contro-ataque"
+        ];
+
+        const grid = document.getElementById('pokemonGrid');
+
+        pokemonKeys.forEach(key => {
+            const movie = moviesDatabase[key];
+            if (!movie) return;
+            const thumb = movie.thumb || movie.heroImg;
+            grid.innerHTML += `
+                <a href="detalhes.html?id=${key}" class="pokemon-movie-card">
+                    <img src="${thumb}" alt="${movie.title}">
+                    <div class="pokemon-card-overlay">
+                        <h4>${movie.title}</h4>
+                        <div class="card-meta">
+                            <span class="badge-age ${movie.ageClass || 'r12'}">${movie.age || 'L'}</span>
+                            <span class="badge-res">${movie.res || 'HD'}</span>
+                        </div>
+                    </div>
+                </a>`;
+        });
+    </script>
+</body>
+</html>
+

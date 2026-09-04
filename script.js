@@ -511,6 +511,70 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==========================================
+    // CONSTRUÇÃO DA ABA "SHOWS"
+    // ==========================================
+    let showsBuilt = false;
+
+    function buildShowsTab() {
+        if (showsBuilt) return;
+        showsBuilt = true;
+
+        const container = document.getElementById('showsTabGrid');
+        if (!container) return;
+
+        // Agrupa os shows por artista
+        const byArtist = {};
+        showTabKeys.forEach(key => {
+            const movie = moviesDatabase[key];
+            if (!movie) return;
+            const name = movie.artist || movie.title;
+            (byArtist[name] = byArtist[name] || []).push(key);
+        });
+
+        // Seções na ordem definida em showSections (ou ordem de inserção)
+        const order = showSections.length
+            ? showSections.map(s => s.artist)
+            : Object.keys(byArtist);
+
+        order.forEach(artistName => {
+            const keys = byArtist[artistName] || [];
+            if (!keys.length) return;
+
+            const section = document.createElement('div');
+            section.className = 'shows-artist-section';
+
+            const heading = document.createElement('h3');
+            heading.className = 'shows-artist-title';
+            heading.textContent = artistName;
+            section.appendChild(heading);
+
+            const grid = document.createElement('div');
+            grid.className = 'shows-artist-grid';
+
+            keys.forEach(key => {
+                const movie = moviesDatabase[key];
+                const thumb = movie.thumb || movie.heroImg;
+                const a = document.createElement('a');
+                a.href = `detalhes.html?id=${key}`;
+                a.className = 'pokemon-movie-card';
+                a.innerHTML = `
+                    <img src="${thumb}" alt="${movie.title}">
+                    <div class="pokemon-card-overlay">
+                        <h4>${movie.title}</h4>
+                        <div class="card-meta">
+                            <span class="badge-age ${movie.ageClass || 'r12'}">${movie.age || 'L'}</span>
+                            <span class="badge-res">${movie.res || 'HD'}</span>
+                        </div>
+                    </div>`;
+                grid.appendChild(a);
+            });
+
+            section.appendChild(grid);
+            container.appendChild(section);
+        });
+    }
+
+    // ==========================================
     // LÓGICA DE ABAS (TAB SWITCHING)
     // ==========================================
     const tabBtns = document.querySelectorAll('.tab-bar .tab-btn');
@@ -551,6 +615,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             } else if (targetTab === 'pokemon') {
                 buildPokemonTab();
+            } else if (targetTab === 'shows') {
+                buildShowsTab();
             }
 
             // Scroll ao topo

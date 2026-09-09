@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css?v=4">
+    <link rel="stylesheet" href="style.css?v=5">
 </head>
 <body class="detail-page-body">
 
@@ -32,7 +32,7 @@
         </div>
     </nav>
 
-    <!-- PÃGINA DE DETALHES -->
+    <!-- PÁGINA DE DETALHES -->
     <main class="detail-main">
         <!-- HERO BANNER FULLSCREEN -->
         <section class="detail-hero-section">
@@ -58,7 +58,7 @@
                     Prepare-se para "Vingadores: Doutor Destino" da Marvel Studios, em dezembro de 2026, só nos cinemas.
                 </p>
 
-                <!-- BOTÃ•ES DE AÃ‡ÃƒO -->
+                <!-- BOTÕES DE AÇÃO -->
                 <div class="detail-action-buttons">
                     <button class="btn-play-trailer" id="detailPlayTrailerBtn">
                         <span class="material-symbols-outlined filled">play_arrow</span> TRAILER
@@ -70,15 +70,15 @@
             </div>
         </section>
 
-        <!-- SEÃ‡ÃƒO DE ABAS (SUGESTÃ•ES, EXTRAS, DETALHES) -->
+        <!-- SEÇÃO DE ABAS (SUGESTÕES, EXTRAS, DETALHES) -->
         <section class="detail-tabs-section">
             <div class="detail-tabs-nav">
-                <button class="detail-tab-btn active" data-tab="sugestoes">SUGESTÃ•ES</button>
+                <button class="detail-tab-btn active" data-tab="sugestoes">SUGESTÕES</button>
                 <button class="detail-tab-btn" data-tab="extras">EXTRAS</button>
                 <button class="detail-tab-btn" data-tab="detalhes">DETALHES</button>
             </div>
 
-            <!-- CONTEÃšDO DAS ABAS -->
+            <!-- CONTEÚDO DAS ABAS -->
             <div class="detail-tab-pane active" id="tab-sugestoes">
                 <div class="detail-suggestions-grid" id="detailSuggestionsGrid">
                     <!-- Cards preenchidos dinamicamente por JS -->
@@ -123,7 +123,7 @@
         </section>
     </main>
 
-    <!-- MODAL DE VÃDEO DO TRAILER FULLSCREEN -->
+    <!-- MODAL DE VÍDEO DO TRAILER FULLSCREEN -->
     <div class="trailer-modal" id="trailerModal">
         <div class="trailer-modal-content">
             <button class="trailer-close-btn" id="trailerCloseBtn" aria-label="Fechar"><span class="material-symbols-outlined">close</span></button>
@@ -132,10 +132,9 @@
     </div>
 
     <!-- SCRIPTS -->
-    <script src="theme.js"></script>
-    <script src="movies-data.js"></script>
-    <script src="database.js"></script>
+    <script src="theme.js?v=5"></script>
+    <script src="movies-data.js?v=6"></script>
+    <script src="database.js?v=5"></script>
     <script src="detalhes.js"></script>
 </body>
 </html>
-

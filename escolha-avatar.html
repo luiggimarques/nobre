@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=4">
+    <link rel="stylesheet" href="style.css?v=5">
 </head>
 <body>
 
@@ -60,14 +60,14 @@
 
         <div class="settings-header">
             <h1>
-                Escolha o avatar
+                Escolha o Avatar
                 <span class="settings-header-badge">Aura Imperial</span>
             </h1>
             <p>Personalize sua experiência selecionando um herói, ícone ou carregue seu emblema exclusivo.</p>
         </div>
 
         <!-- Banner do Perfil Atualmente Selecionado -->
-        <div style="display:flex;flex-direction:column;align-items:center;gap:1.5rem;justify-content:space-between;bgcolor:red;background:linear-gradient(90deg,#141720,#1b1f2b 50%,#12141c);border:1px solid rgba(242,202,80,0.2);border-radius:16px;padding:2rem;margin-bottom:2rem;">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:1.5rem;justify-content:space-between;background:linear-gradient(90deg,#141720,#1b1f2b 50%,#12141c);border:1px solid rgba(242,202,80,0.2);border-radius:16px;padding:2rem;margin-bottom:2rem;">
             <div style="display:flex;flex-direction:column;align-items:center;text-align:center;gap:1rem;">
                 <div style="position:relative;">
                     <div style="width:100px;height:100px;border-radius:50%;padding:3px;background:linear-gradient(135deg,var(--gold),#fff099,#8d711d);box-shadow:0 0 25px var(--gold-glow);">
@@ -99,7 +99,7 @@
             <input type="text" id="avatarSearchInput" placeholder="Pesquise personagens, franquias ou categorias (ex: Mando, Star Wars, Marvel, Homer)..." style="width:100%;padding:0.9rem 1rem 0.9rem 3rem;background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:12px;color:var(--text-light);font-size:0.85rem;font-family:var(--font-body);" onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--border-subtle)'">
         </div>
 
-        <!-- Categories de Avatares -->
+        <!-- Categorias de Avatares -->
         <div id="categoriesContainer" style="display:flex;flex-direction:column;gap:2rem;">
 
             <!-- Destaques -->
@@ -263,10 +263,10 @@
         <button class="btn-gold" id="saveAvatarBtn"><span class="material-symbols-outlined" style="font-size:16px;">check</span> Salvar</button>
     </div>
 
-    <script src="theme.js"></script>
-    <script src="movies-data.js"></script>
-    <script src="database.js"></script>
-    <script src="script.js"></script>
+    <script src="theme.js?v=5"></script>
+    <script src="movies-data.js?v=6"></script>
+    <script src="database.js?v=5"></script>
+    <script src="script.js?v=5"></script>
     <script>
         let selectedAvatar = null;
 

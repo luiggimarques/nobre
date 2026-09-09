@@ -262,7 +262,7 @@ select,
     opacity: 1;
 }
 
-/* MENU MOBILE (HAMBÃšRGUER) */
+/* MENU MOBILE (HAMBÚRGUER) */
 .mobile-menu {
     position: fixed;
     top: 0;
@@ -343,7 +343,7 @@ select,
     color: var(--gold);
 }
 
-/* TAB BAR (CÃPSULA PILL) */
+/* TAB BAR (CÁPSULA PILL) */
 .tab-bar {
     display: flex;
     justify-content: center;
@@ -499,7 +499,7 @@ main {
     pointer-events: none;
 }
 
-/* OVERLAY CONTEÃšDO DO HERO SLIDE */
+/* OVERLAY CONTEÚDO DO HERO SLIDE */
 .slide-content {
     position: absolute;
     bottom: 3.5rem;
@@ -615,7 +615,7 @@ main {
     box-shadow: 0 6px 24px rgba(212, 175, 55, 0.4);
 }
 
-/* BOTÃ•ES DE NAVEGAÃ‡ÃƒO DO CARROSSEL (< e >) */
+/* BOTÕES DE NAVEGAÇÃO DO CARROSSEL (< e >) */
 .carousel-nav-arrow {
     position: absolute;
     top: 50%;
@@ -821,7 +821,7 @@ main {
 .movie-row::-webkit-scrollbar { display: none; }
 .movie-row { scrollbar-width: none; -ms-overflow-style: none; }
 
-/* BOTÃ•ES DE SCROLL LATERAL (CHEVRONS) */
+/* BOTÕES DE SCROLL LATERAL (CHEVRONS) */
 .row-nav-btn {
     position: absolute;
     top: calc(50% - 0.5rem);
@@ -896,7 +896,7 @@ main {
     transition: opacity 0.4s ease;
 }
 
-/* CONTAINER DE VÃDEO / TRAILER */
+/* CONTAINER DE VÍDEO / TRAILER */
 .video-container {
     position: absolute;
     top: 0;
@@ -919,11 +919,11 @@ main {
     width: 100%;
     height: 100%;
     border: none;
-    transform: scale(1.4); /* Esconde os botÃµes e barras do player do YouTube */
+    transform: scale(1.4); /* Esconde os botões e barras do player do YouTube */
     pointer-events: none;
 }
 
-/* INFORMAÃ‡Ã•ES E BADGES */
+/* INFORMAÇÕES E BADGES */
 .card-overlay {
     position: absolute;
     bottom: 0;
@@ -1111,7 +1111,7 @@ main {
 }
 
 /* ==========================================
-   BOTÃƒO DE LOGOUT NA NAVBAR
+   BOTÃO DE LOGOUT NA NAVBAR
    ========================================== */
 .nav-logout-btn {
     background: transparent;
@@ -1133,7 +1133,7 @@ main {
 }
 
 /* ==========================================
-   PÃGINA DE LOGIN / CADASTRO
+   PÁGINA DE LOGIN / CADASTRO
    ========================================== */
 .login-body {
     background: var(--bg-dark);
@@ -1511,7 +1511,7 @@ main {
     background: rgba(255, 255, 255, 0.2);
 }
 
-/* HISTÃ“RICO DE BUSCA */
+/* HISTÓRICO DE BUSCA */
 .search-history {
     margin-bottom: 1.5rem;
 }
@@ -1781,7 +1781,7 @@ main {
 }
 
 /* ==========================================
-   PÃ GINA DEDICADA DE DETALHES (detalhes.html)
+   PÁGINA DEDICADA DE DETALHES (detalhes.html)
    ========================================== */
 .logo-link {
     text-decoration: none;
@@ -2195,7 +2195,7 @@ main {
 }
 
 /* ==========================================
-   TOAST (AVISOS DA NAVEGAÃ‡ÃƒO)
+   TOAST (AVISOS DA NAVEGAÇÃO)
    ========================================== */
 .toast {
     position: fixed;
@@ -2224,7 +2224,7 @@ main {
 }
 
 /* ==========================================
-   PÃGINA MARVEL (marvel.html)
+   PÁGINA MARVEL (marvel.html)
    ========================================== */
 .marvel-hero {
     position: relative;
@@ -2372,7 +2372,7 @@ main {
 }
 
 /* ==========================================
-   PÃGINA POKÃ‰MON (pokemon.html)
+   PÁGINA POKÉMON (pokemon.html)
    ========================================== */
 .pokemon-hero {
     position: relative;
@@ -2567,7 +2567,7 @@ main {
 }
 
 /* ==========================================
-   PÃGINA DISNEY (disney.html)
+   PÁGINA DISNEY (disney.html)
    ========================================== */
 .disney-hero {
     position: relative;
@@ -2672,7 +2672,7 @@ main {
 }
 
 /* ==========================================
-   PÃGINA PIXAR (pixar.html)
+   PÁGINA PIXAR (pixar.html)
    ========================================== */
 .pixar-hero {
     position: relative;
@@ -2777,7 +2777,7 @@ main {
 }
 
 /* ==========================================
-   PÃGINA MARVEL STUDIOS (marvel.html)
+   PÁGINA MARVEL STUDIOS (marvel.html)
    ========================================== */
 .marvel-page-body {
     background-color: #0b0d13;
@@ -2910,7 +2910,7 @@ main {
     will-change: transform;
 }
 
-/* Efeito de destaque idÃªntico ao Disney+ com borda branca radiante */
+/* Efeito de destaque idêntico ao Disney+ com borda branca radiante */
 .marvel-poster-card:hover {
     transform: scale(1.06) translateY(-4px);
     border-color: #ffffff;
@@ -2960,7 +2960,7 @@ main {
 }
 
 /* ==========================================
-   PÃGINA STAR WARS (starwars.html)
+   PÁGINA STAR WARS (starwars.html)
    ========================================== */
 .starwars-hero {
     position: relative;
@@ -3062,7 +3062,7 @@ main {
 }
 
 /* ==========================================
-   PÃGINA STAR (star.html)
+   PÁGINA STAR (star.html)
    ========================================== */
 .star-hero {
     position: relative;
@@ -3167,7 +3167,7 @@ main {
 }
 
 /* ==========================================
-   PÃGINA E ABA POKÃ‰MON
+   PÁGINA E ABA POKÉMON
    ========================================== */
 .pokemon-hero, .pokemon-tab-hero {
     position: relative;
@@ -4228,6 +4228,68 @@ main {
     transition: all 0.2s;
 }
 .btn-outline:hover { border-color: var(--gold); }
+
+/* Streaming Partners Access (Disney+, Netflix, HBO Max) */
+.stream-access-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 0.85rem;
+}
+.stream-access-card {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 1rem;
+    border-radius: 14px;
+    background: rgba(26, 27, 32, 0.8);
+    border: 1px solid var(--border-subtle);
+    text-decoration: none;
+    transition: all 0.25s;
+}
+.stream-access-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(242, 202, 80, 0.45);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+.stream-access-card:active { transform: scale(0.98); }
+.stream-logo {
+    width: 52px;
+    height: 52px;
+    min-width: 52px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: rgba(10, 10, 13, 0.65);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+.stream-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 5px;
+}
+.stream-logo svg { width: 26px; height: 26px; }
+.stream-text { flex: 1; min-width: 0; }
+.stream-text strong {
+    display: block;
+    font-size: 0.9rem;
+    color: var(--text-light);
+    font-weight: 700;
+}
+.stream-text span {
+    display: block;
+    font-size: 0.7rem;
+    color: var(--text-subtle);
+    margin-top: 0.15rem;
+}
+.stream-access-card > .material-symbols-outlined {
+    font-size: 18px;
+    color: var(--text-muted);
+    transition: color 0.2s, transform 0.2s;
+}
+.stream-access-card:hover > .material-symbols-outlined { color: var(--gold); transform: translate(2px, -2px); }
 
 /* Settings page responsive */
 @media (max-width: 1023px) {

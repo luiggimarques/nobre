@@ -24,6 +24,8 @@ const moviesDatabase = {
         title: "Homem-Aranha: Um Novo Dia",
         tagline: "Uma nova era para o herói da vizinhança",
         heroImg: "images/movie-2.jpg",
+        thumb: "images/homemaranha.jpg",
+        logoImg: "images/logohomemaranha.png",
         age: "12+",
         ageClass: "r12",
         res: "4K Ultra HD",
@@ -540,7 +542,7 @@ const moviesDatabase = {
         ageClass: "r12",
         res: "4K HDR",
         genre: "Aventura • Ação • Ficção Científica",
-        description: "Décadas após a queda do Império, uma nova ameaça surge, e a eliminação Rey, o stormtrooper Finn e o piloto Poe Dameron embarcam em uma nova aventura galáctica.",
+        description: "Décadas após a queda do Império, uma nova ameaça surge, e a jovem Rey, o stormtrooper Finn e o piloto Poe Dameron embarcam em uma nova aventura galáctica.",
         trailerId: "sGbxmsDFVnE",
         duration: "2h 16min",
         release: "2015",
@@ -1013,29 +1015,29 @@ const moviesDatabase = {
         trailerId: "OkIugPAbMFo",
         showUrl: "https://www.youtube.com/watch?v=OkIugPAbMFo"
     },
-    "show-metallica-paris-2017": {
-        title: "Metallica: Live in Paris",
+    "show-metallica-Bo-2026": {
+        title: "Metallica: Bologna-Italy",
         artist: "Metallica",
-        tagline: "França, 2017",
-        heroImg: "images/show-metallica.jpg",
-        thumb: "images/show-metallica.jpg",
+        tagline: "italy, 2026",
+        heroImg: "https://i.ytimg.com/vi/MqQWR05dIWo/maxresdefault.jpg",
+        thumb: "https://i.ytimg.com/vi/MqQWR05dIWo/maxresdefault.jpg",
         age: "L",
         ageClass: "l",
         res: "4K HDR",
         genre: "Shows • Metal • Rock",
         description: "O Metallica incendeia Paris em um show completo com os maiores clássicos do thrash metal e muita energia no palco.",
-        duration: "2h 13min",
-        release: "2017",
+        duration: "6-Min",
+        release: "2026",
         rating: "Livre",
-        trailerId: "85oEUVqgefU",
-        showUrl: "https://www.youtube.com/watch?v=85oEUVqgefU"
+        trailerId: "MqQWR05dIWo",
+        showUrl: "https://www.youtube.com/watch?v=MqQWR05dIWo&list"
     },
-    "show-metallica-munique-2015": {
-        title: "Metallica: Live in Munich",
+    "show-metallica-Berlin-2026": {
+        title: "Metallica: Live in Berlin",
         artist: "Metallica",
-        tagline: "Alemanha, 2015",
-        heroImg: "images/show-metallica.jpg",
-        thumb: "images/show-metallica.jpg",
+        tagline: "Alemanha, 2026",
+        heroImg: "https://i.ytimg.com/vi/g84yzqMNhN0/maxresdefault.jpg",
+        thumb: "https://i.ytimg.com/vi/g84yzqMNhN0/maxresdefault.jpg",
         age: "L",
         ageClass: "l",
         res: "4K HDR",
@@ -1044,8 +1046,8 @@ const moviesDatabase = {
         duration: "2h 14min",
         release: "2015",
         rating: "Livre",
-        trailerId: "rt0DC7PFmMs",
-        showUrl: "https://www.youtube.com/watch?v=rt0DC7PFmMs"
+        trailerId: "g84yzqMNhN0",
+        showUrl: "https://www.youtube.com/watch?v=g84yzqMNhN0&list"
     },
     "show-metallica-manchester-2019": {
         title: "Metallica: Live in Manchester",
@@ -1635,7 +1637,7 @@ const moviesDatabase = {
         ageClass: "l",
         res: "4K HDR",
         genre: "Shows • K-Pop • Música",
-        description: "Concertro completo do ENHYPEN em Anaheim na turnê FATE PLUS, com coreografias impecáveis.",
+        description: "Concerto completo do ENHYPEN em Anaheim na turnê FATE PLUS, com coreografias impecáveis.",
         duration: "2h 39min",
         release: "2024",
         rating: "Livre",
@@ -1812,7 +1814,7 @@ const featuredSlides = [
     },
     {
         key: "vingadores-doutor-destino",
-        img: "https://i.pinimg.com/736x/b7/a0/35/b7a0358bc35698f39b09ce5eb39e3c96.jpg",
+        img: "images/banner-doutor-destino.jpg",
         title: "Vingadores: Doutor Destino",
         brand: "Marvel Studios",
         badge: "Em Breve",
@@ -1930,8 +1932,8 @@ const pokemonTabKeys = [
 const showTabKeys = [
     // Metallica
     "show-metallica",
-    "show-metallica-paris-2017",
-    "show-metallica-munique-2015",
+    "show-metallica-Bo-2026",
+    "show-metallica-Berlin-2026",
     "show-metallica-manchester-2019",
     "show-metallica-lisboa-2007",
     "show-metallica-berlim-2006",

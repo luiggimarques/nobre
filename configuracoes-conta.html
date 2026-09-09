@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=4">
+    <link rel="stylesheet" href="style.css?v=5">
 </head>
 <body>
 
@@ -170,6 +170,51 @@
                                 Cancelar Plano
                             </button>
                         </div>
+                    </div>
+                </div>
+
+                <!-- Streaming Parceiros da Assinatura -->
+                <div class="settings-card" id="streaming-access">
+                    <div class="settings-card-header">
+                        <div class="header-left">
+                            <div class="header-icon"><span class="material-symbols-outlined">cable</span></div>
+                            <div>
+                                <h3>Acessos da Assinatura</h3>
+                                <p>Entre nas plataformas parceiras inclusas no seu plano diretamente pelo ícone da empresa.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="stream-access-grid">
+                        <a href="https://www.netflix.com" target="_blank" rel="noopener noreferrer" class="stream-access-card" title="Abrir Netflix">
+                            <div class="stream-logo stream-logo-netflix">
+                                <img src="images/netflix.png" alt="Netflix">
+                            </div>
+                            <div class="stream-text">
+                                <strong>Netflix</strong>
+                                <span>Filmes, séries e originais Netflix</span>
+                            </div>
+                            <span class="material-symbols-outlined">open_in_new</span>
+                        </a>
+                        <a href="https://www.disneyplus.com" target="_blank" rel="noopener noreferrer" class="stream-access-card" title="Abrir Disney+">
+                            <div class="stream-logo stream-logo-disney">
+                                <img src="images/disneyplus.png" alt="Disney+">
+                            </div>
+                            <div class="stream-text">
+                                <strong>Disney+</strong>
+                                <span>Disney, Pixar, Marvel e Star Wars</span>
+                            </div>
+                            <span class="material-symbols-outlined">open_in_new</span>
+                        </a>
+                        <a href="https://www.max.com" target="_blank" rel="noopener noreferrer" class="stream-access-card" title="Abrir HBO Max">
+                            <div class="stream-logo stream-logo-max">
+                                <img src="images/hbo-max.webp" alt="HBO Max">
+                            </div>
+                            <div class="stream-text">
+                                <strong>HBO Max</strong>
+                                <span>HBO, Warner Bros e Max Originals</span>
+                            </div>
+                            <span class="material-symbols-outlined">open_in_new</span>
+                        </a>
                     </div>
                 </div>
 
@@ -345,10 +390,10 @@
         </div>
     </footer>
 
-    <script src="theme.js"></script>
-    <script src="movies-data.js"></script>
-    <script src="database.js"></script>
-    <script src="script.js"></script>
+    <script src="theme.js?v=5"></script>
+    <script src="movies-data.js?v=6"></script>
+    <script src="database.js?v=5"></script>
+    <script src="script.js?v=5"></script>
     <script>
         document.querySelectorAll('.settings-logout-btn').forEach(btn => {
             btn.addEventListener('click', () => {

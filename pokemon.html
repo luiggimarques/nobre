@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css?v=5">
+    <link rel="stylesheet" href="style.css?v=6">
 </head>
 <body>
 
@@ -24,10 +24,7 @@
 
     <main>
         <section class="pokemon-hero">
-            <div class="pokemon-hero-bg">
-                <span class="poke-ball"></span>
-                <span class="poke-ball small"></span>
-            </div>
+            <div class="pokemon-hero-bg"></div>
             <div class="pokemon-hero-content">
                 <h1 class="pokemon-title">POKÉMON</h1>
                 <p class="pokemon-subtitle">Gotta catch 'em all! Todos os filmes, só no Nobre+</p>
@@ -36,45 +33,103 @@
         </section>
 
         <section class="pokemon-grid-section">
-            <h2>Todos os Filmes Pokémon</h2>
-            <div class="pokemon-movies-grid" id="pokemonGrid"></div>
+            <h2>Filmes Pokémon no Nobre+</h2>
+            <div id="pokemonSections"></div>
         </section>
     </main>
 
     <script src="theme.js?v=5"></script>
-    <script src="movies-data.js?v=6"></script>
+    <script src="movies-data.js?v=10"></script>
     <script src="database.js?v=5"></script>
     <script>
         if (!DB.isLoggedIn()) {
             window.location.href = 'login.html';
         }
-        const pokemonKeys = [
-            "pokemon-detective-pikachu",
-            "pokemon-os-pokemon-o-poder-de-todos",
-            "pokemon-mewtwo-strikes-back",
-            "pokemon-i-o-pikachu-e-o-pokemon-selvagem",
-            "pokemon-movie-mewtwo-contro-ataque"
+
+        const pokemonSections = [
+            {
+                title: "Saga Clássica",
+                keys: [
+                    "pokemon-movie-mewtwo-contro-ataque",
+                    "pokemon-2-o-poder-um-so",
+                    "pokemon-3-o-feitico-dos-unown",
+                    "pokemon-4-viajantes-do-tempo",
+                    "pokemon-herois"
+                ]
+            },
+            {
+                title: "Aventuras Modernas",
+                keys: [
+                    "pokemon-lucario-e-o-misterio-de-mew",
+                    "pokemon-os-pokemon-o-poder-de-todos",
+                    "pokemon-i-o-pikachu-e-o-pokemon-selvagem",
+                    "pokemon-mewtwo-strikes-back",
+                    "pokemon-segredos-da-selva",
+                    "pokemon-detective-pikachu"
+                ]
+            }
         ];
 
-        const grid = document.getElementById('pokemonGrid');
+        document.addEventListener('DOMContentLoaded', () => {
+            const sectionsHost = document.getElementById('pokemonSections');
+            if (!sectionsHost) return;
 
-        pokemonKeys.forEach(key => {
-            const movie = moviesDatabase[key];
-            if (!movie) return;
-            const thumb = movie.thumb || movie.heroImg;
-            grid.innerHTML += `
-                <a href="detalhes.html?id=${key}" class="pokemon-movie-card">
-                    <img src="${thumb}" alt="${movie.title}">
-                    <div class="pokemon-card-overlay">
-                        <h4>${movie.title}</h4>
-                        <div class="card-meta">
-                            <span class="badge-age ${movie.ageClass || 'r12'}">${movie.age || 'L'}</span>
-                            <span class="badge-res">${movie.res || 'HD'}</span>
-                        </div>
-                    </div>
-                </a>`;
+            pokemonSections.forEach(section => {
+                const sec = document.createElement('section');
+                sec.className = 'pokemon-grid-section';
+
+                const title = document.createElement('h2');
+                title.textContent = section.title;
+
+                const grid = document.createElement('div');
+                grid.className = 'pokemon-movies-grid';
+
+                section.keys.forEach(key => {
+                    const movie = moviesDatabase[key];
+                    if (!movie) return;
+                    const thumb = movie.thumb || movie.heroImg;
+
+                    const card = document.createElement('a');
+                    card.href = `detalhes.html?id=${key}`;
+                    card.className = 'pokemon-movie-card';
+
+                    const img = document.createElement('img');
+                    img.src = thumb;
+                    img.alt = movie.title;
+                    img.loading = 'lazy';
+                    img.onerror = () => posterFallback(img, movie.title);
+
+                    const overlay = document.createElement('div');
+                    overlay.className = 'pokemon-card-overlay';
+
+                    const name = document.createElement('h4');
+                    name.textContent = movie.title;
+
+                    const meta = document.createElement('div');
+                    meta.className = 'card-meta';
+
+                    const age = document.createElement('span');
+                    age.className = `badge-age ${movie.ageClass || 'r12'}`;
+                    age.textContent = movie.age || 'L';
+
+                    const res = document.createElement('span');
+                    res.className = 'badge-res';
+                    res.textContent = movie.res || 'HD';
+
+                    meta.appendChild(age);
+                    meta.appendChild(res);
+                    overlay.appendChild(name);
+                    overlay.appendChild(meta);
+                    card.appendChild(img);
+                    card.appendChild(overlay);
+                    grid.appendChild(card);
+                });
+
+                sec.appendChild(title);
+                sec.appendChild(grid);
+                sectionsHost.appendChild(sec);
+            });
         });
     </script>
 </body>
 </html>
-

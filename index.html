@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css?v=5">
+    <link rel="stylesheet" href="style.css?v=8">
 </head>
 <body>
 
@@ -87,14 +87,6 @@
     <!-- TAB BAR (Pill / Cápsula) -->
     <div class="tab-bar">
         <button class="tab-btn active" data-tab="paravoce">Para Você</button>
-        <button class="tab-btn" data-tab="disneyplus" title="Disney+">
-            <svg class="tab-logo tab-logo-disney" viewBox="0 0 110 40" fill="currentColor">
-                <path d="M26.2 19.3c-.4-.1-.8-.1-1.2-.1-3.6 0-5.8 2.3-5.8 5.7 0 3.7 2.6 5.8 6.3 5.8 3.5 0 5.9-2.1 5.9-5.6 0-3.6-2.3-5.7-5.2-5.8zm-1.1 9.4c-2.3 0-3.8-1.5-3.8-3.8 0-2.2 1.4-3.7 3.7-3.7.3 0 .6 0 .9.1.1.4.1.8.1 1.2 0 3.8-1 6.2-.9 6.2zm19.8-12.8h-2.5v14.5h2.5V15.9zm13.4 8.7c-2.5 0-4.3 1.3-4.3 3.4 0 2 1.5 3 3.8 3 2.5 0 4.1-1.2 4.1-3.3 0-2-1.7-3.1-3.6-3.1zm-4.3-1.6c1.1-1.1 2.8-1.7 4.6-1.7 3.9 0 6.3 2.4 6.3 6.1 0 3.8-2.6 6.3-6.8 6.3-3.9 0-6.4-2.4-6.4-6.1 0-1.8.8-3.5 2.3-4.6zm19.4 1.9c0-1.4-.9-2.2-2.4-2.2-1.8 0-3.2 1.1-3.2 2.6 0 1.5 1.2 2.3 3.1 2.8 3.2.8 5 2 5 4.7 0 3.2-2.7 5.1-6.1 5.1-3.4 0-5.9-1.7-5.9-4.5h2.6c0 1.6 1.3 2.5 3.3 2.5 2 0 3.4-1 3.4-2.7 0-1.5-1.1-2.2-3.1-2.8-3-.8-4.9-1.9-4.9-4.6 0-2.8 2.4-4.8 5.7-4.8 3.1 0 5.2 1.7 5.4 4.1h-2.9v-.2zm16.5-9.1v6.9h-4.3v2.3h4.3v8.5c0 2.6 1.3 3.9 3.8 3.9.9 0 1.8-.2 2.3-.5v-2.3c-.4.2-.9.3-1.4.3-1.3 0-1.9-.7-1.9-2v-7.9h3.7v-2.3h-3.7v-6.9h-2.8zm11 11.2h3.5v-3.8h2.6v3.8h3.5v2.5h-3.5v3.8h-2.6v-3.8h-3.5v-2.5zM11.6 12.8C6 13.5 1.5 18 1.5 23.6c0 6.3 5.3 11.4 11.8 11.4 5.3 0 9.8-3.5 11.2-8.3-2.1.8-4.5 1.3-7 1.3-6.2 0-10.7-3.9-10.7-9.5 0-3 1.4-5.7 3.7-7.4-1.5-.7-3.3-1-5.1-.9.4.5.8 1.1 1.2 1.7.3.3.4.7.2 1z"/>
-            </svg>
-        </button>
-        <button class="tab-btn" data-tab="pokemon" title="Pokémon">
-            <span style="font-family:'Impact',sans-serif;font-weight:900;letter-spacing:1px;font-size:0.95rem;">POKÉMON</span>
-        </button>
         <button class="tab-btn" data-tab="shows" title="Shows">
             <span class="material-symbols-outlined tab-icon-show">music_note</span>
             <span>Shows</span>
@@ -126,6 +118,7 @@
             <section class="carousel-section">
                 <div class="carousel-container" id="disneyCarouselContainer"></div>
                 <div class="carousel-dots" id="disneyCarouselDots"></div>
+                
             </section>
 
             <section class="brand-hubs brand-hubs-disney">
@@ -133,7 +126,7 @@
                 <div class="brand-card" data-brand="pixar"><img class="brand-logo brand-logo-invert" src="https://thumb.wikimedia.org/wikipedia/commons/thumb/4/40/Pixar_logo.svg/1280px-Pixar_logo.svg.png" alt="Pixar"></div>
                 <div class="brand-card" data-brand="marvel"><img class="brand-logo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Marvel_Logo.svg/1280px-Marvel_Logo.svg.png" alt="Marvel"></div>
                 <div class="brand-card" data-brand="starwars"><img class="brand-logo" src="https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6c/Star_Wars_Logo.svg/1280px-Star_Wars_Logo.svg.png" alt="Star Wars"></div>
-                <div class="brand-card" data-brand="natgeo"><img class="brand-logo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/National_Geographic_logo.svg/1280px-National_Geographic_logo.svg.png" alt="National Geographic" class="brand-logo-natgeo"></div>
+                <div class="brand-card" data-brand="natgeo"><img class="brand-logo brand-logo-natgeo" src="https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6a/National-Geographic-Logo.svg/1280px-National-Geographic-Logo.svg.png" alt="National Geographic"></div>
             </section>
 
             <div id="disneyDynamicSections"></div>
@@ -170,6 +163,7 @@
                 <div class="pokemon-tab-hero-content">
                     <h1 class="shows-title">SHOWS</h1>
                     <p class="pokemon-subtitle">Os melhores concertos e apresentações musicais, só no Nobre+</p>
+                    <a href="detalhes.html?id=show-metallica" class="shows-featured-link"><span class="material-symbols-outlined">play_circle</span> Metallica: M72 World Tour</a>
                 </div>
             </section>
 
@@ -180,7 +174,7 @@
     </main>
 
     <script src="theme.js?v=5"></script>
-    <script src="movies-data.js?v=6"></script>
+    <script src="movies-data.js?v=10"></script>
     <script src="database.js?v=5"></script>
     <script src="script.js?v=5"></script>
 </body>

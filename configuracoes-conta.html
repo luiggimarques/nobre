@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -391,14 +391,14 @@
     </footer>
 
     <script src="theme.js?v=5"></script>
-    <script src="movies-data.js?v=6"></script>
+    <script src="movies-data.js?v=10"></script>
     <script src="database.js?v=5"></script>
     <script src="script.js?v=5"></script>
     <script>
         document.querySelectorAll('.settings-logout-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 if (confirm('Deseja sair da conta Nobre+?')) {
-                    localStorage.removeItem('nobre_user');
+                    DB.logout();
                     window.location.href = 'login.html';
                 }
             });

@@ -65,16 +65,66 @@ document.addEventListener('DOMContentLoaded', () => {
         detailHeroImg.alt = movie.title;
     }
 
-    if (movie.logoImg && detailMovieLogo) {
-        detailMovieLogo.src = movie.logoImg;
-        detailMovieLogo.alt = movie.title;
-        detailMovieLogo.style.display = 'block';
-        if (detailMovieTitle) detailMovieTitle.style.display = 'none';
-    } else {
-        if (detailMovieLogo) detailMovieLogo.style.display = 'none';
-        if (detailMovieTitle) {
-            detailMovieTitle.textContent = movie.title;
-            detailMovieTitle.style.display = 'block';
+    // ==========================================
+    // LOGO DO FILME (imagem real ou gerada)
+    // ==========================================
+    function escapeXmlLogo(str) {
+        return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&apos;');
+    }
+
+    function buildTextLogo(title, fontSize = 76) {
+        const words = String(title || '').trim().split(/\s+/).filter(Boolean);
+        const lineLength = 16;
+        const lines = [];
+        let current = '';
+        words.forEach(w => {
+            const candidate = current ? current + ' ' + w : w;
+            if (candidate.length <= lineLength) {
+                current = candidate;
+            } else {
+                if (current) lines.push(current);
+                current = w;
+            }
+        });
+        if (current) lines.push(current);
+
+        const maxChars = Math.max(...lines.map(l => l.length), 1);
+        const width = Math.ceil(maxChars * fontSize * 0.66) + 60;
+        const height = Math.ceil(lines.length * fontSize * 1.25) + 20;
+
+        const textEls = lines.map((line, i) => {
+            const y = ((i + 1) * fontSize * 1.25).toFixed(1);
+            return `<text x="30" y="${y}" fill="#ffffff" font-family="'Montserrat', Arial, sans-serif" font-weight="900" font-size="${fontSize}" letter-spacing="4">${escapeXmlLogo(line)}</text>`;
+        }).join('');
+
+        const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">
+  <defs>
+    <filter id="s" x="-20%" y="-20%" width="140%" height="180%">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#000000" flood-opacity="0.95"/>
+    </filter>
+  </defs>
+  <g filter="url(#s)">${textEls}</g>
+</svg>`;
+        return 'data:image/svg+xml;charset=utf8,' + encodeURIComponent(svg);
+    }
+
+    if (detailMovieLogo) {
+        const showLogo = (src, onError) => {
+            detailMovieLogo.onerror = onError || null;
+            detailMovieLogo.src = src;
+            detailMovieLogo.alt = movie.title;
+            detailMovieLogo.style.display = 'block';
+            if (detailMovieTitle) detailMovieTitle.style.display = 'none';
+        };
+        if (movie.logoImg) {
+            showLogo(movie.logoImg, () => showLogo(buildTextLogo(movie.title), null));
+        } else {
+            showLogo(buildTextLogo(movie.title), null);
         }
     }
 

@@ -65,13 +65,15 @@
             bgDark: '#121317', bgCanvas: '#0d0e12', bgCard: '#1f1f24',
             bgElevated: '#292a2e', bgHighlight: '#343439',
             textLight: '#e3e2e8', textMuted: '#d0c5af', textSubtle: '#99907c',
-            surfaceGlass: 'rgba(18, 19, 23, 0.82)'
+            surfaceGlass: 'rgba(18, 19, 23, 0.82)',
+            error: '#ff6b6b', success: '#2fbf71'
         },
         light: {
             bgDark: '#f4f2ec', bgCanvas: '#ffffff', bgCard: '#ffffff',
             bgElevated: '#efece3', bgHighlight: '#e6e2d5',
             textLight: '#1f1d17', textMuted: '#5a5445', textSubtle: '#8a8270',
-            surfaceGlass: 'rgba(255, 255, 255, 0.82)'
+            surfaceGlass: 'rgba(255, 255, 255, 0.82)',
+            error: '#c62b2f', success: '#1a7f4b'
         }
     };
 
@@ -146,6 +148,8 @@
         r.setProperty('--text-muted', m.textMuted);
         r.setProperty('--text-subtle', m.textSubtle);
         r.setProperty('--surface-glass', m.surfaceGlass);
+        r.setProperty('--color-error', m.error);
+        r.setProperty('--color-success', m.success);
 
         // Cor de destaque (accent)
         r.setProperty('--color-primary', accent.primary);

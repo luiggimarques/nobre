@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -138,7 +138,7 @@
                         <div class="theme-card" data-theme="light">
                             <div style="height:100%;width:100%;background:linear-gradient(135deg,#f5f3ef 0%,#e8e4da 60%,#d9d2c2 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.5rem;">
                                 <span class="material-symbols-outlined" style="font-size:32px;color:#8a6d1f;">light_mode</span>
-                                <span style="color:#4a3a10;font-weight:600;font-size:0.8rem;">Claro (Brilhante)</span>
+                                <span style="color:#4a3a10;font-weight:600;font-size:0.8rem;">Claro (Brilliant)</span>
                             </div>
                             <div class="theme-label" style="color:#2a2108;">Tema Claro</div>
                             <div class="theme-check"><span class="material-symbols-outlined" style="font-size:16px;font-variation-settings:'FILL' 1;">check</span></div>
@@ -295,7 +295,7 @@
     </footer>
 
     <script src="theme.js?v=5"></script>
-    <script src="movies-data.js?v=6"></script>
+    <script src="movies-data.js?v=10"></script>
     <script src="database.js?v=5"></script>
     <script src="script.js?v=5"></script>
     <script>
@@ -363,7 +363,7 @@
         document.querySelectorAll('.settings-logout-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 if (confirm('Deseja sair da conta Nobre+?')) {
-                    localStorage.removeItem('nobre_user');
+                    DB.logout();
                     window.location.href = 'login.html';
                 }
             });

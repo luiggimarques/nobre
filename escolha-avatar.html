@@ -25,11 +25,8 @@
         </div>
         <ul class="nav-links">
             <li><a href="index.html"><span class="material-symbols-outlined">home</span> Início</a></li>
-            <li><a href="#"><span class="material-symbols-outlined">bolt</span> Ao Vivo</a></li>
             <li><a href="#"><span class="material-symbols-outlined">add</span> Minha Lista</a></li>
-            <li><a href="#"><span class="material-symbols-outlined">movie</span> Filmes</a></li>
             <li><a href="#"><span class="material-symbols-outlined">tv</span> Séries</a></li>
-            <li><a href="#"><span class="material-symbols-outlined">star</span> Originais</a></li>
         </ul>
         <div class="nav-right">
             <button class="nav-search-btn" id="openSearchBtn" aria-label="Pesquisar"><span class="material-symbols-outlined">search</span></button>
@@ -41,11 +38,9 @@
     <!-- MENU MOBILE -->
     <div class="mobile-menu" id="mobileMenu">
         <a href="index.html"><span class="material-symbols-outlined">home</span> Início</a>
-        <a href="#"><span class="material-symbols-outlined">bolt</span> Ao Vivo</a>
         <a href="#"><span class="material-symbols-outlined">add</span> Minha Lista</a>
-        <a href="#"><span class="material-symbols-outlined">movie</span> Filmes</a>
         <a href="#"><span class="material-symbols-outlined">tv</span> Séries</a>
-        <a href="#"><span class="material-symbols-outlined">star</span> Originais</a>
+        <a href="selecao-perfil.html"><span class="material-symbols-outlined">manage_accounts</span> Trocar Perfil</a>
         <a href="configuracoes.html"><span class="material-symbols-outlined">settings</span> Configurações</a>
     </div>
     <div class="menu-backdrop" id="menuBackdrop"></div>
@@ -90,6 +85,29 @@
                     Carregar Foto Customizada
                     <input type="file" accept="image/*" id="customAvatarInput" hidden>
                 </label>
+                <button class="btn-outline" id="cameraAvatarBtn" style="cursor:pointer;" title="Tirar foto com a câmera">
+                    <span class="material-symbols-outlined" style="font-size:16px;">camera_alt</span>
+                    Tirar Foto
+                </button>
+            </div>
+
+            <!-- Modal da Câmera -->
+            <div id="cameraModal" class="camera-modal" style="display:none;">
+                <div class="camera-modal-content">
+                    <div class="camera-header">
+                        <h3>Tirar Foto</h3>
+                        <button class="camera-close" id="cameraCloseBtn" aria-label="Fechar câmera"><span class="material-symbols-outlined">close</span></button>
+                    </div>
+                    <div class="camera-view">
+                        <video id="cameraVideo" autoplay playsinline style="width:100%;max-width:400px;border-radius:12px;background:#000;"></video>
+                        <canvas id="cameraCanvas" style="display:none;max-width:400px;border-radius:12px;"></canvas>
+                    </div>
+                    <div class="camera-controls" style="display:flex;gap:1rem;justify-content:center;margin-top:1rem;">
+                        <button class="btn-outline" id="cameraRetakeBtn" style="display:none;"><span class="material-symbols-outlined">refresh</span> Refazer</button>
+                        <button class="btn-gold" id="cameraCaptureBtn"><span class="material-symbols-outlined">circle</span> Capturar</button>
+                        <button class="btn-gold" id="cameraSaveBtn" style="display:none;"><span class="material-symbols-outlined">check</span> Salvar</button>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -344,6 +362,121 @@
                 const visible = !q || name.includes(q) || category.includes(q);
                 item.style.display = visible ? 'flex' : 'none';
             });
+        });
+
+        // ==========================================
+        // CÂMERA - Captura de foto para avatar
+        // ==========================================
+        let cameraStream = null;
+        let capturedImageData = null;
+
+        const cameraModal = document.getElementById('cameraModal');
+        const cameraVideo = document.getElementById('cameraVideo');
+        const cameraCanvas = document.getElementById('cameraCanvas');
+        const cameraCaptureBtn = document.getElementById('cameraCaptureBtn');
+        const cameraRetakeBtn = document.getElementById('cameraRetakeBtn');
+        const cameraSaveBtn = document.getElementById('cameraSaveBtn');
+        const cameraCloseBtn = document.getElementById('cameraCloseBtn');
+        const cameraAvatarBtn = document.getElementById('cameraAvatarBtn');
+
+        async function startCamera() {
+            try {
+                cameraStream = await navigator.mediaDevices.getUserMedia({
+                    video: { facingMode: 'user', width: { ideal: 640 }, height: { ideal: 480 } },
+                    audio: false
+                });
+                cameraVideo.srcObject = cameraStream;
+                await cameraVideo.play();
+            } catch (err) {
+                alert('Não foi possível acessar a câmera. Verifique as permissões do navegador.');
+                console.error('Camera error:', err);
+                closeCameraModal();
+            }
+        }
+
+        function stopCamera() {
+            if (cameraStream) {
+                cameraStream.getTracks().forEach(track => track.stop());
+                cameraStream = null;
+            }
+            cameraVideo.srcObject = null;
+        }
+
+        function openCameraModal() {
+            cameraModal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+            cameraCaptureBtn.style.display = 'inline-flex';
+            cameraRetakeBtn.style.display = 'none';
+            cameraSaveBtn.style.display = 'none';
+            cameraVideo.style.display = 'block';
+            cameraCanvas.style.display = 'none';
+            capturedImageData = null;
+            startCamera();
+        }
+
+        function closeCameraModal() {
+            cameraModal.style.display = 'none';
+            document.body.style.overflow = '';
+            stopCamera();
+        }
+
+        function capturePhoto() {
+            const ctx = cameraCanvas.getContext('2d');
+            cameraCanvas.width = cameraVideo.videoWidth;
+            cameraCanvas.height = cameraVideo.videoHeight;
+            ctx.drawImage(cameraVideo, 0, 0);
+            capturedImageData = cameraCanvas.toDataURL('image/jpeg', 0.9);
+            cameraVideo.style.display = 'none';
+            cameraCanvas.style.display = 'block';
+            cameraCaptureBtn.style.display = 'none';
+            cameraRetakeBtn.style.display = 'inline-flex';
+            cameraSaveBtn.style.display = 'inline-flex';
+        }
+
+        function retakePhoto() {
+            cameraVideo.style.display = 'block';
+            cameraCanvas.style.display = 'none';
+            cameraCaptureBtn.style.display = 'inline-flex';
+            cameraRetakeBtn.style.display = 'none';
+            cameraSaveBtn.style.display = 'none';
+            capturedImageData = null;
+        }
+
+        function saveCameraPhoto() {
+            if (!capturedImageData) return;
+            document.getElementById('currentAvatarImg').src = capturedImageData;
+            selectedAvatar = { name: 'Câmera', src: capturedImageData };
+            document.getElementById('currentAvatarName').textContent = 'Câmera';
+            closeCameraModal();
+        }
+
+        // Event listeners
+        if (cameraAvatarBtn) {
+            cameraAvatarBtn.addEventListener('click', openCameraModal);
+        }
+        if (cameraCloseBtn) {
+            cameraCloseBtn.addEventListener('click', closeCameraModal);
+        }
+        if (cameraCaptureBtn) {
+            cameraCaptureBtn.addEventListener('click', capturePhoto);
+        }
+        if (cameraRetakeBtn) {
+            cameraRetakeBtn.addEventListener('click', retakePhoto);
+        }
+        if (cameraSaveBtn) {
+            cameraSaveBtn.addEventListener('click', saveCameraPhoto);
+        }
+        // Fechar modal clicando fora
+        if (cameraModal) {
+            cameraModal.addEventListener('click', (e) => {
+                if (e.target === cameraModal) closeCameraModal();
+            });
+        }
+        // Tecla Escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && cameraModal.style.display === 'flex') {
+                closeCameraModal();
+            }
         });
     </script>
 </body>

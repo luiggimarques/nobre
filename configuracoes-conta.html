@@ -25,11 +25,8 @@
         </div>
         <ul class="nav-links">
             <li><a href="index.html"><span class="material-symbols-outlined">home</span> Início</a></li>
-            <li><a href="#"><span class="material-symbols-outlined">bolt</span> Ao Vivo</a></li>
             <li><a href="#"><span class="material-symbols-outlined">add</span> Minha Lista</a></li>
-            <li><a href="#"><span class="material-symbols-outlined">movie</span> Filmes</a></li>
             <li><a href="#"><span class="material-symbols-outlined">tv</span> Séries</a></li>
-            <li><a href="#"><span class="material-symbols-outlined">star</span> Originais</a></li>
         </ul>
         <div class="nav-right">
             <button class="nav-search-btn" id="openSearchBtn" aria-label="Pesquisar"><span class="material-symbols-outlined">search</span></button>
@@ -41,11 +38,9 @@
     <!-- MENU MOBILE -->
     <div class="mobile-menu" id="mobileMenu">
         <a href="index.html"><span class="material-symbols-outlined">home</span> Início</a>
-        <a href="#"><span class="material-symbols-outlined">bolt</span> Ao Vivo</a>
         <a href="#"><span class="material-symbols-outlined">add</span> Minha Lista</a>
-        <a href="#"><span class="material-symbols-outlined">movie</span> Filmes</a>
         <a href="#"><span class="material-symbols-outlined">tv</span> Séries</a>
-        <a href="#"><span class="material-symbols-outlined">star</span> Originais</a>
+        <a href="selecao-perfil.html"><span class="material-symbols-outlined">manage_accounts</span> Trocar Perfil</a>
         <a href="configuracoes.html"><span class="material-symbols-outlined">settings</span> Configurações</a>
     </div>
     <div class="menu-backdrop" id="menuBackdrop"></div>
@@ -395,6 +390,26 @@
     <script src="database.js?v=5"></script>
     <script src="script.js?v=5"></script>
     <script>
+        // Atualiza campos da conta com dados do perfil ativo
+        (function() {
+            const session = DB.getSession();
+            const activeProfile = DB.getActiveProfile();
+            
+            if (session) {
+                // Nome do titular (conta principal)
+                const accountNameEl = document.getElementById('accountName');
+                const accountEmailEl = document.getElementById('accountEmail');
+                
+                if (accountNameEl) accountNameEl.textContent = session.username;
+                if (accountEmailEl) accountEmailEl.textContent = session.email;
+            }
+
+            // Se estiver no perfil ativo, mostra info do perfil
+            if (activeProfile) {
+                console.log('Perfil ativo:', activeProfile.name);
+            }
+        })();
+
         document.querySelectorAll('.settings-logout-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 if (confirm('Deseja sair da conta Nobre+?')) {

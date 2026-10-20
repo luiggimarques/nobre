@@ -454,9 +454,9 @@ main {
 .carousel-container {
     position: relative;
     width: 100%;
-    height: 60vh;
-    min-height: 440px;
-    max-height: 620px;
+    height: 70vh;
+    min-height: 500px;
+    max-height: 720px;
     border-radius: 12px;
     overflow: hidden;
     border: 1px solid var(--border-subtle);
@@ -893,6 +893,83 @@ main {
     object-fit: cover;
     display: block;
     transition: opacity 0.4s ease;
+    background: linear-gradient(135deg, var(--bg-elevated) 0%, var(--bg-card) 100%);
+}
+
+.card-thumb.loading {
+    opacity: 0.4;
+}
+
+.card-thumb.error {
+    opacity: 0;
+}
+
+/* Placeholder para imagens que falharam ao carregar */
+.movie-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, var(--bg-elevated) 0%, var(--bg-card) 100%);
+    z-index: 0;
+    pointer-events: none;
+}
+
+.movie-card.loaded::before {
+    display: none;
+}
+
+.poster-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    background: linear-gradient(135deg, var(--bg-elevated) 0%, var(--bg-card) 100%);
+    transition: opacity 0.3s ease;
+}
+
+.poster-img.loading {
+    opacity: 0.4;
+}
+
+.poster-img.error {
+    opacity: 0;
+}
+
+.poster-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, var(--bg-elevated) 0%, var(--bg-card) 100%);
+    z-index: 0;
+    pointer-events: none;
+}
+
+.poster-card.loaded::before {
+    display: none;
+}
+
+/* Slide do carrossel */
+.slide-bg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    background: linear-gradient(135deg, var(--bg-elevated) 0%, var(--bg-card) 100%);
+}
+
+.search-result-img,
+.search-suggestion-img {
+    width: 100%;
+    aspect-ratio: 16/9;
+    object-fit: cover;
+    display: block;
+    background: linear-gradient(135deg, var(--bg-elevated) 0%, var(--bg-card) 100%);
 }
 
 /* CONTAINER DE VÍDEO / TRAILER */
@@ -1770,6 +1847,111 @@ main {
 }
 
 /* ==========================================
+   SELETOR DE PERFIS NO DROPDOWN
+   ========================================== */
+.lp-profile-switcher {
+    padding: 0.25rem 0;
+    margin-bottom: 0.25rem;
+}
+
+.lp-profile-switcher-label {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-subtle);
+    font-weight: 700;
+    font-family: var(--font-label);
+    padding: 0 0.7rem 0.35rem;
+}
+
+.lp-profiles-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    padding: 0 0.2rem;
+}
+
+.lp-profile-item {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    width: 100%;
+    padding: 0.5rem 0.6rem;
+    background: none;
+    border: none;
+    border-radius: 8px;
+    color: var(--text-muted);
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.lp-profile-item:hover {
+    background: var(--bg-elevated);
+    color: var(--text-light);
+}
+
+.lp-profile-item.active {
+    background: rgba(212, 175, 55, 0.12);
+    color: var(--gold);
+}
+
+.lp-profile-item-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid transparent;
+    transition: border-color 0.15s;
+}
+
+.lp-profile-item.active .lp-profile-item-avatar {
+    border-color: var(--gold);
+}
+
+.lp-profile-item-check {
+    font-size: 16px;
+    color: var(--gold);
+    margin-left: auto;
+}
+
+.lp-add-profile-btn,
+.lp-manage-profiles-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.55rem 0.7rem;
+    background: none;
+    border: none;
+    border-radius: 9px;
+    color: var(--gold);
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.15s;
+    margin-top: 0.25rem;
+}
+
+.lp-add-profile-btn:hover,
+.lp-manage-profiles-btn:hover {
+    background: rgba(212, 175, 55, 0.1);
+    color: var(--gold-bright);
+}
+
+.lp-add-profile-btn .material-symbols-outlined,
+.lp-manage-profiles-btn .material-symbols-outlined {
+    font-size: 18px;
+}
+
+/* ==========================================
    LP / MODAL DE AUTENTICAÇÃO
    ========================================== */
 .lp-auth-overlay {
@@ -2423,6 +2605,76 @@ main {
 .search-empty p {
     font-size: 1.1rem;
     font-weight: 500;
+}
+
+/* AUTOCOMPLETE / HELPER DE BUSCA */
+.search-suggestions {
+    display: none;
+    margin-top: 0.5rem;
+    border-radius: 10px;
+    background: rgba(21, 23, 34, 0.95);
+    border: 1px solid var(--border-subtle);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.7);
+    overflow: hidden;
+    max-height: 320px;
+    overflow-y: auto;
+}
+
+.search-suggestion-item {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0.6rem 1rem;
+    text-decoration: none;
+    color: inherit;
+    transition: background 0.2s ease;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.search-suggestion-item:last-child {
+    border-bottom: none;
+}
+
+.search-suggestion-item:hover {
+    background: rgba(212, 175, 55, 0.12);
+}
+
+.search-suggestion-img {
+    width: 56px;
+    height: 32px;
+    object-fit: cover;
+    border-radius: 4px;
+    flex-shrink: 0;
+}
+
+.search-suggestion-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.search-suggestion-info h4 {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-light);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 0.2rem;
+}
+
+.search-suggestion-info mark {
+    background: var(--gold);
+    color: var(--accent-contrast);
+    padding: 0 2px;
+    border-radius: 2px;
+    font-weight: 700;
+}
+
+.search-suggestion-info .card-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.65rem;
 }
 
 @media (max-width: 768px) {
@@ -3626,7 +3878,7 @@ main {
 
 .saga-row {
     display: flex;
-    gap: 1.1rem;
+    gap: 0.85rem;
     overflow-x: auto;
     overflow-y: visible;
     padding: 0.8rem 0.5rem 1.8rem 0.5rem;
@@ -3649,8 +3901,8 @@ main {
 
 .marvel-poster-card {
     position: relative;
-    width: 200px;
-    height: 300px;
+    width: 230px;
+    height: 345px;
     aspect-ratio: 2 / 3;
     flex-shrink: 0;
     border-radius: 8px;
@@ -3665,6 +3917,19 @@ main {
     text-decoration: none;
     display: block;
     will-change: transform;
+}
+
+/* Destaque promocional Disney+ (borda com aura verde vista na referência) */
+.marvel-poster-card.highlight-green,
+.marvel-poster-card[data-highlight="green"] {
+    border-color: #22c55e;
+    box-shadow: 0 0 16px rgba(34, 197, 94, 0.45), 0 10px 20px rgba(0, 0, 0, 0.6);
+}
+
+.marvel-poster-card.highlight-green:hover,
+.marvel-poster-card[data-highlight="green"]:hover {
+    border-color: #4ade80;
+    box-shadow: 0 0 25px rgba(74, 222, 128, 0.7), 0 20px 40px rgba(0, 0, 0, 0.9);
 }
 
 /* Efeito de destaque idêntico ao Disney+ com borda branca radiante */
@@ -4150,7 +4415,58 @@ main {
     font-variation-settings: 'FILL' 1;
 }
 
-.shows-sections {
+/* ==========================================
+   ABA SÉRIES (TV SERIES)
+   ========================================== */
+.series-tab-hero {
+    position: relative;
+    width: 100%;
+    height: 50vh;
+    min-height: 350px;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+    margin-bottom: 2rem;
+    border-radius: 12px;
+}
+.series-tab-hero-bg {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background:
+        linear-gradient(135deg, rgba(10,10,26,0.95) 0%, rgba(26,20,48,0.9) 55%, rgba(13,14,24,0.95) 100%),
+        url('https://image.tmdb.org/t/p/w1920_and_h800_multi_faces/8mAyDNSCZDiejPTm4lwgbztut7y.jpg') center/cover no-repeat;
+    z-index: 0;
+}
+.series-bg-pattern {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-image: 
+        radial-gradient(circle at 20% 20%, rgba(212,175,55,0.08) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(138,43,226,0.06) 0%, transparent 50%),
+        radial-gradient(circle at 50% 50%, rgba(255,0,0,0.03) 0%, transparent 40%);
+    z-index: 1;
+}
+.series-tab-hero-content {
+    position: relative;
+    z-index: 3;
+    padding: 3rem 4rem;
+}
+.series-title {
+    font-size: 4rem;
+    font-weight: 900;
+    letter-spacing: 4px;
+    background: linear-gradient(135deg, #fff 0%, var(--gold-bright) 50%, var(--gold) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.6));
+}
+.series-sections {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+}
     display: flex;
     flex-direction: column;
     gap: 2.5rem;
@@ -4195,7 +4511,7 @@ main {
     .pokemon-movie-card img, .marvel-movie-card img { aspect-ratio: 16/9; }
     .marvel-page-header { padding: 1rem 1.2rem 0.5rem; }
     .marvel-saga-section { padding: 1rem 1.2rem; }
-    .marvel-poster-card { width: 130px; height: 195px; }
+    .marvel-poster-card { width: 170px; height: 255px; }
 }
 
 @media (max-width: 600px) {
@@ -5213,5 +5529,201 @@ main {
 .section-title .material-symbols-outlined {
     font-size: 1.4rem;
     color: var(--gold);
+}
+
+/* ==========================================
+   CAMERA MODAL (Avatar Capture)
+   ========================================== */
+.camera-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 5000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: 1.5rem;
+    animation: modalFadeIn 0.25s ease;
+}
+
+.camera-modal-content {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 16px;
+    padding: 1.5rem;
+    max-width: 440px;
+    width: 100%;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 40px var(--gold-glow-subtle);
+    animation: tabFadeIn 0.3s ease;
+}
+
+.camera-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.camera-header h3 {
+    font-family: var(--font-headline);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-light);
+}
+
+.camera-close {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-subtle);
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    color: var(--text-subtle);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.camera-close:hover {
+    color: var(--gold);
+    border-color: var(--gold);
+}
+
+.camera-view {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.camera-view video,
+.camera-view canvas {
+    width: 100%;
+    max-width: 400px;
+    border-radius: 12px;
+    background: #000;
+}
+
+.camera-controls {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+}
+
+.camera-controls .btn-outline,
+.camera-controls .btn-gold {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.7rem 1.2rem;
+    border-radius: 10px;
+    font-family: var(--font-label);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.camera-controls .btn-outline {
+    background: transparent;
+    color: var(--gold);
+    border: 1px solid var(--border-subtle);
+}
+
+.camera-controls .btn-outline:hover {
+    border-color: var(--gold);
+    background: var(--gold-glow-subtle);
+}
+
+.camera-controls .btn-gold {
+    background: var(--gold-gradient);
+    color: var(--accent-contrast);
+    border: none;
+    box-shadow: 0 4px 18px var(--gold-glow);
+}
+
+.camera-controls .btn-gold:hover {
+    filter: brightness(1.1);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 24px var(--gold-glow);
+}
+
+/* Avatar grid improvements */
+.avatar-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 1rem;
+}
+
+.avatar-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 10px;
+    transition: all 0.2s ease;
+    border: 2px solid transparent;
+}
+
+.avatar-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(212, 175, 55, 0.3);
+}
+
+.avatar-item.selected {
+    border-color: var(--gold);
+    box-shadow: 0 0 12px var(--gold-glow-subtle);
+}
+
+.avatar-img-wrap {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid var(--border-subtle);
+    background: var(--bg-elevated);
+    position: relative;
+}
+
+.avatar-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.2s ease;
+}
+
+.avatar-item:hover .avatar-img-wrap img {
+    transform: scale(1.05);
+}
+
+.avatar-name {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-light);
+    text-align: center;
+    max-width: 100px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+@media (max-width: 768px) {
+    .avatar-grid {
+        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+        gap: 0.75rem;
+    }
+    .avatar-img-wrap {
+        width: 70px;
+        height: 70px;
+    }
 }
 

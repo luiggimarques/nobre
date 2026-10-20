@@ -1,15 +1,256 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nobre+ | Star Wars</title>
+    <meta name="description" content="Todos os filmes e séries Star Wars no Nobre+. Trilogias, filmes anthology e séries completas.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css?v=9">
+    <style>
+        /* ==========================================
+           STAR WARS PAGE – ENHANCED CARDS
+           ========================================== */
+        .sw-section-label {
+            color: #f9f9f9;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.35rem;
+            font-weight: 800;
+            letter-spacing: 0.03em;
+            padding: 0.5rem 0 0.8rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .sw-section-label .label-icon {
+            font-size: 1.2rem;
+            color: #FFE81F;
+            opacity: 0.85;
+        }
+
+        .sw-section-label::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, rgba(255, 232, 31, 0.3) 0%, transparent 80%);
+            margin-left: 0.5rem;
+        }
+
+        .sw-films-section {
+            padding: 0.5rem 3rem 1rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .sw-films-row-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .sw-films-row {
+            display: flex;
+            gap: 16px;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            padding: 10px 4px 20px;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .sw-films-row::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Enhanced Card - Estilo Disney+ com info overlay */
+        .sw-card {
+            position: relative;
+            flex-shrink: 0;
+            width: 220px;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #151722;
+            border: 2px solid transparent;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+            transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1),
+                        box-shadow 0.35s cubic-bezier(0.25, 1, 0.5, 1),
+                        border-color 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            display: block;
+            color: #f9f9f9;
+        }
+
+        .sw-card:hover {
+            transform: scale(1.06) translateY(-6px);
+            border-color: #FFE81F;
+            box-shadow: 0 0 20px rgba(255, 232, 31, 0.3), 0 20px 40px rgba(0, 0, 0, 0.8);
+            z-index: 10;
+        }
+
+        .sw-card-poster {
+            width: 100%;
+            aspect-ratio: 2 / 3;
+            object-fit: cover;
+            object-position: center top;
+            display: block;
+            transition: transform 0.35s ease;
+        }
+
+        .sw-card:hover .sw-card-poster {
+            transform: scale(1.04);
+        }
+
+        .sw-card-info {
+            padding: 10px 12px 14px;
+            background: linear-gradient(180deg, #151722 0%, #0d0f16 100%);
+        }
+
+        .sw-card-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: #f9f9f9;
+            line-height: 1.3;
+            margin: 0 0 8px 0;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            min-height: 2.1em;
+        }
+
+        .sw-card-meta {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .sw-card-meta .badge-age {
+            font-size: 0.62rem;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-weight: 700;
+            font-family: 'Manrope', sans-serif;
+            color: #fff;
+            line-height: 1;
+        }
+
+        .sw-card-meta .meta-text {
+            font-family: 'Manrope', sans-serif;
+            font-size: 0.68rem;
+            color: #a1a4b2;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .sw-card-meta .meta-dot {
+            color: #555;
+            font-size: 0.5rem;
+        }
+
+        /* Section heading with Star Wars icon */
+        .sw-saga-heading {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .sw-saga-heading .heading-ep {
+            background: linear-gradient(135deg, #FFE81F 0%, #B8860B 100%);
+            color: #0b0d13;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.65rem;
+            font-weight: 800;
+            padding: 3px 8px;
+            border-radius: 4px;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        /* Row navigation buttons */
+        .sw-row-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 5;
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(255, 232, 31, 0.2);
+            color: #FFE81F;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s, background 0.3s;
+        }
+
+        .sw-films-row-wrapper:hover .sw-row-nav {
+            opacity: 1;
+        }
+
+        .sw-row-nav:hover {
+            background: rgba(255, 232, 31, 0.2);
+        }
+
+        .sw-row-nav.prev { left: -8px; }
+        .sw-row-nav.next { right: -8px; }
+
+        .sw-row-nav .material-symbols-outlined {
+            font-size: 24px;
+        }
+
+        /* Divider between sections */
+        .sw-section-divider {
+            border: none;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 232, 31, 0.15), transparent);
+            margin: 0.3rem 3rem 0.3rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .sw-films-section {
+                padding: 0.5rem 1.5rem 1rem;
+            }
+            .sw-section-divider {
+                margin: 0.3rem 1.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sw-films-section {
+                padding: 0.3rem 1rem 0.8rem;
+            }
+            .sw-card {
+                width: 160px;
+            }
+            .sw-card-title {
+                font-size: 0.7rem;
+            }
+            .sw-section-label {
+                font-size: 1.1rem;
+            }
+            .sw-section-divider {
+                margin: 0.3rem 1rem;
+            }
+        }
+    </style>
 </head>
 <body class="starwars-page-body">
 
@@ -19,7 +260,7 @@
             <a href="index.html" class="logo-link" title="Nobre+"><img src="images/nobre-logo.png" alt="Nobre+" class="nav-brand-logo"></a>
             <ul class="nav-links">
                 <li><a href="index.html"><span class="material-symbols-outlined">home</span> Início</a></li>
-                <li><a href="#" class="active"><i class="fa-solid fa-star"></i> Star Wars</a></li>
+                <li><a href="#" class="active"><i class="fa-solid fa-jedi"></i> Star Wars</a></li>
                 <li><a href="index.html"><i class="fa-solid fa-square-plus"></i> Minha Lista</a></li>
             </ul>
         </div>
@@ -35,37 +276,100 @@
 
         <!-- HERO BRAND BANNER -->
         <section class="marvel-page-header">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6c/Star_Wars_Logo.svg" alt="Star Wars" class="marvel-header-logo">
-            <p class="marvel-header-sub">Que a Força esteja com você, em todos os filmes do Nobre+</p>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6c/Star_Wars_Logo.svg" alt="Star Wars" class="marvel-header-logo" style="filter: brightness(10);">
+            <p class="marvel-header-sub">Que a Força esteja com você. Todos os filmes e séries, só no Nobre+</p>
         </section>
 
-        <!-- TODOS OS FILMES STAR WARS -->
-        <section class="marvel-saga-section">
-            <h2 class="saga-title">Todos os Filmes Star Wars</h2>
-            <div class="saga-row-wrapper">
-                <button class="row-nav-btn prev-btn" aria-label="Voltar"><span class="material-symbols-outlined">chevron_left</span></button>
-                <div class="saga-row" id="starwarsRow"></div>
-                <button class="row-nav-btn next-btn" aria-label="Avançar"><span class="material-symbols-outlined">chevron_right</span></button>
+        <!-- FILMES -->
+        <section class="sw-films-section" id="secFilmes">
+            <h2 class="sw-section-label">
+                <span class="material-symbols-outlined label-icon">movie</span>
+                Filmes
+            </h2>
+        </section>
+
+        <hr class="sw-section-divider">
+
+        <!-- TRILOGIA PREQUEL -->
+        <section class="sw-films-section" id="secPrequel">
+            <div class="sw-saga-heading">
+                <span class="heading-ep">Episódios I – III</span>
+                <h2 class="sw-section-label" style="margin:0;">Trilogia Prequel</h2>
+            </div>
+            <div class="sw-films-row-wrapper">
+                <button class="sw-row-nav prev" aria-label="Voltar"><span class="material-symbols-outlined">chevron_left</span></button>
+                <div class="sw-films-row" id="swPrequelRow"></div>
+                <button class="sw-row-nav next" aria-label="Avançar"><span class="material-symbols-outlined">chevron_right</span></button>
             </div>
         </section>
+
+        <!-- TRILOGIA ORIGINAL -->
+        <section class="sw-films-section" id="secOriginal">
+            <div class="sw-saga-heading">
+                <span class="heading-ep">Episódios IV – VI</span>
+                <h2 class="sw-section-label" style="margin:0;">Trilogia Original</h2>
+            </div>
+            <div class="sw-films-row-wrapper">
+                <button class="sw-row-nav prev" aria-label="Voltar"><span class="material-symbols-outlined">chevron_left</span></button>
+                <div class="sw-films-row" id="swOriginalRow"></div>
+                <button class="sw-row-nav next" aria-label="Avançar"><span class="material-symbols-outlined">chevron_right</span></button>
+            </div>
+        </section>
+
+        <!-- TRILOGIA SEQUEL -->
+        <section class="sw-films-section" id="secSequel">
+            <div class="sw-saga-heading">
+                <span class="heading-ep">Episódios VII – IX</span>
+                <h2 class="sw-section-label" style="margin:0;">Trilogia Sequel</h2>
+            </div>
+            <div class="sw-films-row-wrapper">
+                <button class="sw-row-nav prev" aria-label="Voltar"><span class="material-symbols-outlined">chevron_left</span></button>
+                <div class="sw-films-row" id="swSequelRow"></div>
+                <button class="sw-row-nav next" aria-label="Avançar"><span class="material-symbols-outlined">chevron_right</span></button>
+            </div>
+        </section>
+
+        <!-- FILMES ANTHOLOGY -->
+        <section class="sw-films-section" id="secAnthology">
+            <div class="sw-saga-heading">
+                <span class="heading-ep">Histórias</span>
+                <h2 class="sw-section-label" style="margin:0;">Filmes Anthology</h2>
+            </div>
+            <div class="sw-films-row-wrapper">
+                <button class="sw-row-nav prev" aria-label="Voltar"><span class="material-symbols-outlined">chevron_left</span></button>
+                <div class="sw-films-row" id="swAnthologyRow"></div>
+                <button class="sw-row-nav next" aria-label="Avançar"><span class="material-symbols-outlined">chevron_right</span></button>
+            </div>
+        </section>
+
+        <hr class="sw-section-divider">
+
+        <!-- SÉRIES -->
+        <section class="sw-films-section" id="secSeries">
+            <h2 class="sw-section-label">
+                <span class="material-symbols-outlined label-icon">live_tv</span>
+                Séries Star Wars
+            </h2>
+            <div class="sw-films-row-wrapper">
+                <button class="sw-row-nav prev" aria-label="Voltar"><span class="material-symbols-outlined">chevron_left</span></button>
+                <div class="sw-films-row" id="swSeriesRow"></div>
+                <button class="sw-row-nav next" aria-label="Avançar"><span class="material-symbols-outlined">chevron_right</span></button>
+            </div>
+        </section>
+
     </main>
 
     <script src="theme.js?v=5"></script>
-    <script src="movies-data.js?v=10"></script>
+    <script src="movies-data.js?v=13"></script>
     <script src="database.js?v=5"></script>
     <script>
-        const starwarsKeys = [
-            "star-wars-uma-nova-esperanca",
-            "star-wars-imperio-contra-ataca",
-            "star-wars-retorno-do-jedi",
-            "star-wars-ameaca-fantasma",
-            "star-wars-despertar-da-forca",
-            "star-wars-rogue-one"
-        ];
-
         document.addEventListener('DOMContentLoaded', () => {
             if (!DB.requireLogin()) return;
-            function renderSagaRow(keys, containerId) {
+
+            /**
+             * Renderiza cards ricos com poster + título + ano + gênero + badge de idade
+             */
+            function renderEnhancedRow(keys, containerId) {
                 const container = document.getElementById(containerId);
                 if (!container) return;
 
@@ -74,32 +378,48 @@
                     if (!movie) return;
                     const posterImg = movie.thumb || movie.heroImg;
 
+                    // Extrair ano do campo release (ex: "1999", "2019-2023" → "1999", "2019")
+                    const year = movie.release ? movie.release.match(/\d{4}/)?.[0] || '' : '';
+
+                    // Simplificar gênero (pegar até 2 gêneros)
+                    const genreParts = (movie.genre || '').split(/[•,·]/).map(g => g.trim()).filter(Boolean);
+                    const shortGenre = genreParts.slice(0, 2).join(', ');
+
                     const card = document.createElement('a');
                     card.href = `detalhes.html?id=${key}`;
-                    card.className = 'marvel-poster-card';
+                    card.className = 'sw-card';
                     card.setAttribute('data-movie-key', key);
 
-                    const img = document.createElement('img');
-                    img.src = posterImg;
-                    img.alt = movie.title;
-                    img.className = 'marvel-poster-img';
-                    img.width = 200;
-                    img.height = 300;
-                    img.loading = 'lazy';
-                    img.onerror = () => posterFallback(img, movie.title);
+                    card.innerHTML = `
+                        <img src="${posterImg}" alt="${movie.title}" class="sw-card-poster" loading="lazy"
+                             onerror="posterFallback(this, '${movie.title.replace(/'/g, "\\'")}')">
+                        <div class="sw-card-info">
+                            <h4 class="sw-card-title">${movie.title}</h4>
+                            <div class="sw-card-meta">
+                                <span class="badge-age ${movie.ageClass || 'r12'}">${movie.age || '12+'}</span>
+                                ${year ? `<span class="meta-text">${year}</span>` : ''}
+                                ${year && shortGenre ? `<span class="meta-dot">•</span>` : ''}
+                                ${shortGenre ? `<span class="meta-text">${shortGenre}</span>` : ''}
+                            </div>
+                        </div>
+                    `;
 
-                    card.appendChild(img);
                     container.appendChild(card);
                 });
             }
 
-            renderSagaRow(starwarsKeys, 'starwarsRow');
+            // Renderizar todas as seções
+            renderEnhancedRow(swTrilogiaPrequel, 'swPrequelRow');
+            renderEnhancedRow(swTrilogiaOriginal, 'swOriginalRow');
+            renderEnhancedRow(swTrilogiaSequel, 'swSequelRow');
+            renderEnhancedRow(swFilmesAnthology, 'swAnthologyRow');
+            renderEnhancedRow(swSeries, 'swSeriesRow');
 
             // Scroll horizontal com mouse wheel, botões e arrastar
-            document.querySelectorAll('.saga-row-wrapper').forEach(wrapper => {
-                const row = wrapper.querySelector('.saga-row');
-                const prevBtn = wrapper.querySelector('.prev-btn');
-                const nextBtn = wrapper.querySelector('.next-btn');
+            document.querySelectorAll('.sw-films-row-wrapper').forEach(wrapper => {
+                const row = wrapper.querySelector('.sw-films-row');
+                const prevBtn = wrapper.querySelector('.sw-row-nav.prev');
+                const nextBtn = wrapper.querySelector('.sw-row-nav.next');
 
                 if (row) {
                     row.addEventListener('wheel', (e) => {

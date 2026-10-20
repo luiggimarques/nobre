@@ -26,11 +26,8 @@
         </div>
         <ul class="nav-links">
             <li><a href="#" class="active"><span class="material-symbols-outlined filled">home</span> Início</a></li>
-            <li><a href="#"><span class="material-symbols-outlined">bolt</span> Ao Vivo</a></li>
             <li><a href="#"><span class="material-symbols-outlined">add</span> Minha Lista</a></li>
-            <li><a href="#"><span class="material-symbols-outlined">movie</span> Filmes</a></li>
             <li><a href="#"><span class="material-symbols-outlined">tv</span> Séries</a></li>
-            <li><a href="#"><span class="material-symbols-outlined">star</span> Originais</a></li>
         </ul>
         <div class="nav-right">
             <button class="nav-search-btn" id="openSearchBtn" aria-label="Pesquisar"><span class="material-symbols-outlined">search</span></button>
@@ -43,11 +40,9 @@
     <!-- MENU MOBILE (HAMBÚRGUER) -->
     <div class="mobile-menu" id="mobileMenu">
         <a href="#" class="active"><span class="material-symbols-outlined">home</span> Início</a>
-        <a href="#"><span class="material-symbols-outlined">bolt</span> Ao Vivo</a>
         <a href="#" id="mobileLista"><span class="material-symbols-outlined">add</span> Minha Lista</a>
-        <a href="#"><span class="material-symbols-outlined">movie</span> Filmes</a>
         <a href="#"><span class="material-symbols-outlined">tv</span> Séries</a>
-        <a href="#"><span class="material-symbols-outlined">star</span> Originais</a>
+        <a href="selecao-perfil.html"><span class="material-symbols-outlined">manage_accounts</span> Trocar Perfil</a>
         <a href="configuracoes.html"><span class="material-symbols-outlined">settings</span> Configurações</a>
     </div>
     <div class="menu-backdrop" id="menuBackdrop"></div>
@@ -77,6 +72,10 @@
 
             <!-- RESULTADOS DA BUSCA -->
             <div class="search-results" id="searchResults"></div>
+            
+            <!-- SUGESTÕES DE AUTOCOMPLETE (HELPER) -->
+            <div class="search-suggestions" id="searchSuggestions"></div>
+            
             <div class="search-empty" id="searchEmpty">
                 <i class="fa-solid fa-film"></i>
                 <p>Nenhum filme encontrado</p>
@@ -87,6 +86,10 @@
     <!-- TAB BAR (Pill / Cápsula) -->
     <div class="tab-bar">
         <button class="tab-btn active" data-tab="paravoce">Para Você</button>
+        <button class="tab-btn" data-tab="series" title="Séries">
+            <span class="material-symbols-outlined">tv</span>
+            <span>Séries</span>
+        </button>
         <button class="tab-btn" data-tab="shows" title="Shows">
             <span class="material-symbols-outlined tab-icon-show">music_note</span>
             <span>Shows</span>
@@ -148,6 +151,23 @@
             <section class="pokemon-grid-section">
                 <h2>Todos os Filmes Pokémon</h2>
                 <div class="pokemon-movies-grid" id="pokemonTabGrid"></div>
+            </section>
+        </div>
+
+        <!-- ========== ABA: SÉRIES (TV) ========== -->
+        <div class="tab-content" id="tab-series">
+            <section class="series-tab-hero">
+                <div class="series-tab-hero-bg">
+                    <span class="series-bg-pattern"></span>
+                </div>
+                <div class="pokemon-tab-hero-content">
+                    <h1 class="series-title">SÉRIES</h1>
+                    <p class="pokemon-subtitle">As melhores séries de TV: Marvel, Netflix, Amazon Prime, HBO e mais</p>
+                </div>
+            </section>
+
+            <section class="pokemon-grid-section series-sections">
+                <div id="seriesTabGrid"></div>
             </section>
         </div>
 

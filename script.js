@@ -1,18 +1,53 @@
 document.addEventListener('DOMContentLoaded', () => {
     // ==========================================
-    // VERIFICAÇÃO DE LOGIN
+    // VERIFICAÇÃO DE LOGIN E PERFIL ATIVO
     // ==========================================
-    if (!DB.requireLogin()) return;
-
     const session = DB.getSession();
+    const activeProfile = DB.getActiveProfile();
+
+    // Se não tem sessão, redireciona para login
+    if (!session) {
+        window.location.href = 'login.html';
+        return;
+    }
+
+    // Se tem sessão mas não tem perfil ativo, redireciona para seleção
+    if (!activeProfile) {
+        window.location.href = 'selecao-perfil.html';
+        return;
+    }
 
     // Preenche o perfil do usuário na navbar
     const navAvatar = document.getElementById('navAvatar');
     const navUsername = document.getElementById('navUsername');
-    if (session) {
+    if (activeProfile) {
+        if (navAvatar) navAvatar.src = activeProfile.avatar;
+        if (navUsername) navUsername.textContent = activeProfile.name;
+    } else if (session) {
         if (navAvatar) navAvatar.src = session.avatar;
         if (navUsername) navUsername.textContent = session.username;
     }
+
+    // Sincroniza avatar/sessão/perfil entre abas (storage event)
+    window.addEventListener('storage', (e) => {
+        if (e.key === DB.KEYS.SESSION) {
+            const newSession = DB.getSession();
+            const newActiveProfile = DB.getActiveProfile();
+            if (newSession && newActiveProfile) {
+                if (navAvatar) navAvatar.src = newActiveProfile.avatar;
+                if (navUsername) navUsername.textContent = newActiveProfile.name;
+            } else if (newSession) {
+                if (navAvatar) navAvatar.src = newSession.avatar;
+                if (navUsername) navUsername.textContent = newSession.username;
+            }
+        }
+    });
+
+    // Também ouve o evento customizado do theme.js
+    window.addEventListener('nobre-theme-changed', () => {
+        // Força re-render de elementos que dependem de variáveis CSS
+        document.documentElement.style.setProperty('--theme-refresh', Date.now());
+    });
 
     // Botão de logout
     const logoutBtn = document.getElementById('navLogoutBtn');
@@ -51,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==========================================
-    // SISTEMA DE BUSCA
+    // SISTEMA DE BUSCA COM AUTOCOMPLETE (HELPER)
     // ==========================================
     const searchOverlay = document.getElementById('searchOverlay');
     const searchInput = document.getElementById('searchInput');
@@ -59,6 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchEmpty = document.getElementById('searchEmpty');
     const searchHistory = document.getElementById('searchHistory');
     const searchHistoryTags = document.getElementById('searchHistoryTags');
+    const searchSuggestions = document.getElementById('searchSuggestions');
     const openSearchBtn = document.getElementById('openSearchBtn');
     const searchCloseBtn = document.getElementById('searchCloseBtn');
     const searchClearBtn = document.getElementById('searchClearBtn');
@@ -79,6 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
         searchResults.style.display = 'none';
         searchEmpty.style.display = 'none';
         searchHistory.style.display = 'block';
+        hideSuggestions();
     }
 
     function renderSearchHistory() {
@@ -119,16 +156,99 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // NOVO: Sistema de sugestões em tempo real (Autocomplete/Helper)
+    let suggestionDebounce;
+    let suggestionCache = new Map();
+    
+    function showSuggestions(query) {
+        if (!query || query.trim().length < 2) {
+            hideSuggestions();
+            return;
+        }
+        
+        const q = query.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        
+        // Verifica cache primeiro
+        if (suggestionCache.has(q)) {
+            renderSuggestions(suggestionCache.get(q));
+            return;
+        }
+        
+        clearTimeout(suggestionDebounce);
+        suggestionDebounce = setTimeout(() => {
+            const results = DB.searchMovies(query);
+            // Limita a 5 sugestões para autocomplete
+            const suggestions = results.slice(0, 5);
+            suggestionCache.set(q, suggestions);
+            if (suggestionCache.size > 50) {
+                const firstKey = suggestionCache.keys().next().value;
+                suggestionCache.delete(firstKey);
+            }
+            renderSuggestions(suggestions);
+        }, 150);
+    }
+    
+    function renderSuggestions(movies) {
+        if (!searchSuggestions) return;
+        
+        if (movies.length === 0) {
+            hideSuggestions();
+            return;
+        }
+        
+        searchSuggestions.innerHTML = movies.map(movie => {
+            const thumb = movie.thumb || movie.heroImg;
+            const ageClass = movie.ageClass || 'r12';
+            const fallbackImg = `https://via.placeholder.com/56x32/1f1f24/d4af37?text=${encodeURIComponent(movie.title).substring(0,20)}`;
+            return `
+                <a href="detalhes.html?id=${movie.key}" class="search-suggestion-item">
+                    <img src="${thumb}" 
+                         alt="${movie.title}" 
+                         class="search-suggestion-img loading"
+                         data-fallback="${fallbackImg}"
+                         onload="this.classList.remove('loading');"
+                         onerror="this.onerror=null; this.src=this.dataset.fallback; this.classList.remove('loading'); this.classList.add('error');"
+                         loading="lazy">
+                    <div class="search-suggestion-info">
+                        <h4>${highlightMatch(movie.title, searchInput.value)}</h4>
+                        <div class="card-meta">
+                            <span class="badge-age ${ageClass}">${movie.age || 'L'}</span>
+                            <span class="badge-res">${movie.res || 'HD'}</span>
+                        </div>
+                    </div>
+                </a>`;
+        }).join('');
+        
+        searchSuggestions.style.display = 'block';
+        searchHistory.style.display = 'none';
+    }
+    
+    function highlightMatch(text, query) {
+        if (!query) return text;
+        const escaped = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const regex = new RegExp(`(${escaped})`, 'gi');
+        return text.replace(regex, '<mark>$1</mark>');
+    }
+    
+    function hideSuggestions() {
+        if (searchSuggestions) {
+            searchSuggestions.style.display = 'none';
+            searchSuggestions.innerHTML = '';
+        }
+    }
+
     function performSearch(query) {
         if (!query || query.trim().length === 0) {
             searchResults.innerHTML = '';
             searchResults.style.display = 'none';
             searchEmpty.style.display = 'none';
             searchHistory.style.display = 'block';
+            hideSuggestions();
             return;
         }
 
         searchHistory.style.display = 'none';
+        hideSuggestions();
         const results = DB.searchMovies(query);
 
         if (results.length === 0) {
@@ -144,9 +264,16 @@ document.addEventListener('DOMContentLoaded', () => {
         searchResults.innerHTML = results.map(movie => {
             const thumb = movie.thumb || movie.heroImg;
             const ageClass = movie.ageClass || 'r12';
+            const fallbackImg = `https://via.placeholder.com/240x135/1f1f24/d4af37?text=${encodeURIComponent(movie.title)}`;
             return `
                 <a href="detalhes.html?id=${movie.key}" class="search-result-card">
-                    <img src="${thumb}" alt="${movie.title}" class="search-result-img">
+                    <img src="${thumb}" 
+                         alt="${movie.title}" 
+                         class="search-result-img loading"
+                         data-fallback="${fallbackImg}"
+                         onload="this.classList.remove('loading');"
+                         onerror="this.onerror=null; this.src=this.dataset.fallback; this.classList.remove('loading'); this.classList.add('error');"
+                         loading="lazy">
                     <div class="search-result-info">
                         <h4>${movie.title}</h4>
                         <div class="card-meta">
@@ -165,13 +292,22 @@ document.addEventListener('DOMContentLoaded', () => {
     let searchDebounce;
     if (searchInput) {
         searchInput.addEventListener('input', () => {
+            const value = searchInput.value.trim();
             clearTimeout(searchDebounce);
-            searchDebounce = setTimeout(() => performSearch(searchInput.value.trim()), 250);
+            searchDebounce = setTimeout(() => performSearch(value), 250);
+            // Mostra sugestões em tempo real (Helper)
+            showSuggestions(value);
         });
         searchInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') {
                 e.preventDefault();
                 performSearch(searchInput.value.trim());
+            }
+        });
+        // Esconde sugestões ao clicar fora
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.search-container')) {
+                hideSuggestions();
             }
         });
     }
@@ -232,10 +368,20 @@ document.addEventListener('DOMContentLoaded', () => {
         const movie = moviesDatabase[key];
         if (!movie) return '';
         const ageClass = movie.ageClass || 'r12';
-        const thumb = movie.thumb || movie.heroImg;
+        let thumb = movie.thumb || movie.heroImg;
+        if (key === 'vingadores-doutor-destino') {
+            thumb = 'https://i.pinimg.com/1200x/5a/db/f8/5adbf81722cd435864908bff30b07449.jpg';
+        }
+        // Fallback para imagem de alta qualidade se a local falhar
+        const fallbackImg = `https://via.placeholder.com/380x214/1f1f24/d4af37?text=${encodeURIComponent(movie.title)}`;
         return `
             <div class="movie-card" data-movie-key="${key}" data-trailer="${movie.trailerId || ''}" data-title="${movie.title}">
-                <img src="${thumb}" alt="${movie.title}" class="card-thumb">
+                <img src="${thumb}" 
+                     alt="${movie.title}" 
+                     class="card-thumb loading"
+                     data-fallback="${fallbackImg}"
+                     onload="this.classList.remove('loading'); this.closest('.movie-card').classList.add('loaded');"
+                     onerror="this.onerror=null; this.src=this.dataset.fallback; this.classList.remove('loading'); this.classList.add('error'); this.closest('.movie-card').classList.add('loaded');">
                 <div class="video-container"></div>
                 <div class="card-overlay">
                     <div class="card-info">
@@ -264,7 +410,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return section;
     }
 
-    // Gera a fileira de pôsteres (posters verticais estilo Disney+)
     function buildPosterRowSection() {
         const section = document.createElement('section');
         section.className = 'poster-row-section';
@@ -276,9 +421,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     ${posterRow.map(p => {
                         const movie = moviesDatabase[p.key] || {};
                         const genreShort = (movie.genre || '').split('•')[0].split(',')[0].trim();
+                        const fallbackImg = `https://via.placeholder.com/200x300/1f1f24/d4af37?text=${encodeURIComponent(movie.title || '')}`;
                         return `
                         <div class="poster-card" data-movie-key="${p.key}">
-                            <img src="${p.img}" alt="${movie.title || ''}" class="poster-img">
+                            <img src="${p.img}" 
+                                 alt="${movie.title || ''}" 
+                                 class="poster-img loading"
+                                 data-fallback="${fallbackImg}"
+                                 onload="this.classList.remove('loading'); this.closest('.poster-card').classList.add('loaded');"
+                                 onerror="this.onerror=null; this.src=this.dataset.fallback; this.classList.remove('loading'); this.classList.add('error'); this.closest('.poster-card').classList.add('loaded');">
                             <div class="poster-overlay">
                                 <h4 class="poster-title">${movie.title || ''}</h4>
                                 <div class="poster-meta">
@@ -338,9 +489,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     ${slide.genre ? `<span>•</span> <span class="hero-genre">${slide.genre}</span>` : ''}
                 </div>`;
             const descHtml = slide.description ? `<p class="hero-desc">${slide.description}</p>` : '';
+            const fallbackImg = `https://via.placeholder.com/1920x600/121317/d4af37?text=${encodeURIComponent(slide.title)}`;
 
             slideEl.innerHTML = `
-                <img src="${slide.img}" alt="${slide.title}" class="slide-bg">
+                <img src="${slide.img}" 
+                     alt="${slide.title}" 
+                     class="slide-bg loading"
+                     data-fallback="${fallbackImg}"
+                     onload="this.classList.remove('loading');"
+                     onerror="this.onerror=null; this.src=this.dataset.fallback; this.classList.remove('loading'); this.classList.add('error');">
                 <div class="slide-content">
                     ${badgeHtml}
                     ${brandLogoHtml || brandTextHtml}
@@ -514,6 +671,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // CONSTRUÇÃO DA ABA "SHOWS"
     // ==========================================
     let showsBuilt = false;
+    let seriesBuilt = false;
 
     function buildShowsTab() {
         if (showsBuilt) return;
@@ -534,6 +692,78 @@ document.addEventListener('DOMContentLoaded', () => {
         // Seções na ordem definida em showSections (ou ordem de inserção)
         const order = showSections.length
             ? showSections.map(s => s.artist)
+            : Object.keys(byArtist);
+
+        order.forEach(artistName => {
+            const keys = byArtist[artistName] || [];
+            if (!keys.length) return;
+
+            const section = document.createElement('div');
+            section.className = 'shows-artist-section';
+
+            const heading = document.createElement('h3');
+            heading.className = 'shows-artist-title';
+            heading.textContent = artistName;
+            section.appendChild(heading);
+
+            const grid = document.createElement('div');
+            grid.className = 'shows-artist-grid';
+
+            keys.forEach(key => {
+                const movie = moviesDatabase[key];
+                const thumb = movie.thumb || movie.heroImg;
+                const a = document.createElement('a');
+                a.href = `detalhes.html?id=${key}`;
+                a.className = 'pokemon-movie-card';
+                a.innerHTML = `
+                    <img src="${thumb}" alt="${movie.title}">
+                    <div class="pokemon-card-overlay">
+                        <h4>${movie.title}</h4>
+                        <div class="card-meta">
+                            <span class="badge-age ${movie.ageClass || 'r12'}">${movie.age || 'L'}</span>
+                            <span class="badge-res">${movie.res || 'HD'}</span>
+                        </div>
+                    </div>`;
+                grid.appendChild(a);
+            });
+
+            section.appendChild(grid);
+            container.appendChild(section);
+        });
+    }
+
+    function buildSeriesTab() {
+        if (seriesBuilt) return;
+        seriesBuilt = true;
+
+        console.log('buildSeriesTab called', { seriesTabKeys: typeof seriesTabKeys, seriesSections: typeof seriesSections });
+
+        const container = document.getElementById('seriesTabGrid');
+        if (!container) {
+            console.error('seriesTabGrid container not found');
+            return;
+        }
+
+        // Agrupa as séries por "artist" (ex: Marvel, Netflix, HBO, etc.)
+        const byArtist = {};
+        const keys = (typeof seriesTabKeys !== 'undefined' ? seriesTabKeys : window.seriesTabKeys) || [];
+        const sections = (typeof seriesSections !== 'undefined' ? seriesSections : window.seriesSections) || [];
+        
+        if (keys.length === 0) {
+            console.error('seriesTabKeys is empty or undefined');
+            return;
+        }
+        
+        keys.forEach(key => {
+            const movie = moviesDatabase[key];
+            if (!movie) return;
+            const name = movie.artist || movie.title;
+            (byArtist[name] = byArtist[name] || []).push(key);
+        });
+
+        // Seções na ordem definida em seriesSections (ou ordem de inserção)
+        const order = sections.length
+            ? sections.map(s => s.artist)
             : Object.keys(byArtist);
 
         order.forEach(artistName => {
@@ -603,7 +833,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (homeCarousel) homeCarousel.stopAutoPlay();
             if (disneyCarousel) disneyCarousel.stopAutoPlay();
 
-            // Gerenciar carrosséis por aba
+            // Gerenciar carrosséis/conteúdo por aba
             if (targetTab === 'paravoce') {
                 if (homeCarousel) homeCarousel.startAutoPlay();
             } else if (targetTab === 'disneyplus') {
@@ -617,6 +847,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 buildPokemonTab();
             } else if (targetTab === 'shows') {
                 buildShowsTab();
+            } else if (targetTab === 'series') {
+                buildSeriesTab();
             }
 
             // Scroll ao topo
@@ -774,15 +1006,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================
     const navActions = {
         'HOME': () => window.scrollTo({ top: 0, behavior: 'smooth' }),
-        'FILMES': () => {
-            const section = document.querySelector('.movie-row-section');
-            if (section) section.scrollIntoView({ behavior: 'smooth' });
-            else showToast('Filmes em breve');
-        },
         'PESQUISA': () => openSearch(),
         'MINHA LISTA': () => showToast('Minha Lista em breve'),
-        'SÉRIES': () => showToast('Séries em breve'),
-        'ORIGINAIS': () => showToast('Originais em breve'),
+        'SÉRIES': () => {
+            // Ativa a aba "Séries"
+            const seriesTab = document.querySelector('.tab-btn[data-tab="series"]');
+            if (seriesTab) seriesTab.click();
+        },
         'CONFIGURAÇÕES': () => showToast('Configurações em breve')
     };
 

@@ -41,6 +41,20 @@
                     <strong id="lpDropdownName">Conta</strong>
                     <span id="lpDropdownEmail">—</span>
                 </div>
+
+                <!-- Seletor de Perfil (estilo Netflix) -->
+                <div class="lp-profile-switcher" id="lpProfileSwitcher" style="display:none;">
+                    <div class="lp-profile-switcher-label">Trocar de perfil</div>
+                    <div class="lp-profiles-list" id="lpProfilesList"></div>
+                    <button type="button" class="lp-add-profile-btn" id="lpAddProfileBtn">
+                        <span class="material-symbols-outlined">add</span> Adicionar perfil
+                    </button>
+                    <button type="button" class="lp-manage-profiles-btn" id="lpManageProfilesBtn">
+                        <span class="material-symbols-outlined">manage_accounts</span> Gerenciar perfis
+                    </button>
+                </div>
+
+                <div class="lp-dropdown-sep"></div>
                 <a href="index.html"><span class="material-symbols-outlined">home</span> Ir para o início</a>
                 <a href="configuracoes-conta.html"><span class="material-symbols-outlined">badge</span> Conta e assinatura</a>
                 <a href="editar-perfil.html"><span class="material-symbols-outlined">manage_accounts</span> Editar perfil</a>
@@ -505,7 +519,8 @@
                 const password = $('loginPassword').value;
                 const result = DB.login(email, password);
                 if (result.success) {
-                    window.location.href = 'index.html';
+                    // Redireciona para seleção de perfil (estilo Netflix)
+                    window.location.href = 'selecao-perfil.html';
                 } else {
                     $('loginError').textContent = result.message;
                 }
@@ -559,11 +574,61 @@
             function openDropdown() {
                 dropdown.classList.add('open');
                 accountTrigger.setAttribute('aria-expanded', 'true');
+                renderProfileSwitcher();
             }
 
             function closeDropdown() {
                 dropdown.classList.remove('open');
                 accountTrigger.setAttribute('aria-expanded', 'false');
+            }
+
+            // Renderiza o seletor de perfis no dropdown
+            function renderProfileSwitcher() {
+                const switcher = $('lpProfileSwitcher');
+                const profilesList = $('lpProfilesList');
+                const session = DB.getSession();
+                const activeProfile = DB.getActiveProfile();
+                
+                if (!session || !profilesList) return;
+
+                const profiles = DB.getProfiles(session.userId);
+                if (profiles.length <= 1) {
+                    switcher.style.display = 'none';
+                    return;
+                }
+
+                switcher.style.display = 'block';
+                profilesList.innerHTML = '';
+
+                profiles.forEach(profile => {
+                    const isActive = activeProfile && activeProfile.id === profile.id;
+                    const item = document.createElement('button');
+                    item.type = 'button';
+                    item.className = 'lp-profile-item' + (isActive ? ' active' : '');
+                    item.setAttribute('data-profile-id', profile.id);
+                    item.innerHTML = `
+                        <img src="${profile.avatar}" alt="${profile.name}" class="lp-profile-item-avatar">
+                        <span class="lp-profile-item-name">${profile.name}</span>
+                        ${isActive ? '<span class="material-symbols-outlined lp-profile-item-check">check_circle</span>' : ''}
+                    `;
+                    item.addEventListener('click', () => switchProfile(profile.id));
+                    profilesList.appendChild(item);
+                });
+            }
+
+            // Troca de perfil ativo
+            function switchProfile(profileId) {
+                const result = DB.setActiveProfile(profileId);
+                if (result.success) {
+                    closeDropdown();
+                    // Atualiza UI imediatamente
+                    $('lpUsername').textContent = result.profile.name;
+                    $('lpAvatar').src = result.profile.avatar;
+                    $('lpDropdownName').textContent = result.profile.name;
+                    
+                    // Recarrega a página para aplicar preferências do novo perfil
+                    window.location.reload();
+                }
             }
 
             if (session) {
@@ -578,6 +643,20 @@
 
                 document.addEventListener('click', (e) => {
                     if (!e.target.closest('.lp-account')) { closeDropdown(); }
+                });
+
+                // Botão adicionar perfil no dropdown
+                $('lpAddProfileBtn')?.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    closeDropdown();
+                    window.location.href = 'selecao-perfil.html';
+                });
+
+                // Botão gerenciar perfis no dropdown
+                $('lpManageProfilesBtn')?.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    closeDropdown();
+                    window.location.href = 'selecao-perfil.html';
                 });
 
                 $('lpLogoutBtn').addEventListener('click', () => {

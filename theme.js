@@ -6,6 +6,7 @@
     'use strict';
 
     var STORAGE_KEY = 'nobre_theme';
+    var WALLPAPER_KEY = 'nobre_wallpaper';
 
     var DEFAULT_THEME = {
         mode: 'dark',          // dark | light | auto
@@ -76,8 +77,6 @@
             error: '#c62b2f', success: '#1a7f4b'
         }
     };
-
-    var WALLPAPER_KEY = 'nobre_wallpaper';
 
     var WALLPAPERS = {
         imperial: 'linear-gradient(160deg, #0d0e12 0%, #15161b 45%, #1f2026 100%)',
@@ -175,11 +174,24 @@
 
     function save(theme) {
         try { localStorage.setItem(STORAGE_KEY, JSON.stringify(theme)); } catch (e) {}
-        if (window.__applyThemeNow) { window.__applyThemeNow(); }
         apply();
+        // Dispara evento customizado para outras abas/paginas
+        window.dispatchEvent(new CustomEvent('nobre-theme-changed', { detail: theme }));
     }
 
     function get() { return getSaved(); }
+
+    // Listener para sincronizar tema entre abas
+    window.addEventListener('storage', function(e) {
+        if (e.key === STORAGE_KEY || e.key === WALLPAPER_KEY) {
+            apply();
+        }
+    });
+
+    // Listener para evento customizado (mesma aba)
+    window.addEventListener('nobre-theme-changed', function(e) {
+        apply();
+    });
 
     // Expõe globais para as páginas de configuração
     window.NobreTheme = {
@@ -192,13 +204,32 @@
         WALLPAPER_KEY: WALLPAPER_KEY,
         WALLPAPERS: WALLPAPERS,
         getWallpaper: getWallpaper,
-        applyWallpaper: applyWallpaper
+        applyWallpaper: applyWallpaper,
+        // Helpers para mudança rápida
+        setMode: function(mode) {
+            var theme = get();
+            theme.mode = mode;
+            save(theme);
+        },
+        setAccent: function(accent) {
+            var theme = get();
+            theme.accent = accent;
+            save(theme);
+        },
+        setWallpaper: function(wallpaper) {
+            if (WALLPAPERS[wallpaper]) {
+                localStorage.setItem(WALLPAPER_KEY, wallpaper);
+                applyWallpaper();
+            }
+        }
     };
 
-    // Aplica imediatamente ao carregar
+    // APLICA IMEDIATAMENTE (síncrono, antes do DOMContentLoaded)
+    // Isso evita flash de tema incorreto
+    apply();
+
+    // Re-aplica no DOMContentLoaded para garantir
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', apply);
-    } else {
-        apply();
     }
 })();

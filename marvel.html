@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css?v=5">
+    <link rel="stylesheet" href="style.css?v=6">
 </head>
 <body class="marvel-page-body">
 
@@ -58,10 +58,20 @@
                 <button class="row-nav-btn next-btn" aria-label="Avançar"><span class="material-symbols-outlined">chevron_right</span></button>
             </div>
         </section>
+
+        <!-- SÉRIES MARVEL -->
+        <section class="marvel-saga-section">
+            <h2 class="saga-title">Séries Marvel</h2>
+            <div class="saga-row-wrapper">
+                <button class="row-nav-btn prev-btn" aria-label="Voltar"><span class="material-symbols-outlined">chevron_left</span></button>
+                <div class="saga-row" id="seriesRow"></div>
+                <button class="row-nav-btn next-btn" aria-label="Avançar"><span class="material-symbols-outlined">chevron_right</span></button>
+            </div>
+        </section>
     </main>
 
     <script src="theme.js?v=5"></script>
-    <script src="movies-data.js?v=10"></script>
+    <script src="movies-data.js?v=11"></script>
     <script src="database.js?v=5"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -80,12 +90,19 @@
                     card.className = 'marvel-poster-card';
                     card.setAttribute('data-movie-key', key);
 
+                    // Efeito de destaque visual visto no Disney+ (Guerra Infinita, Ultimato, Loki, Shang-Chi)
+                    const promoKeys = ['vingadores-guerra-infinita', 'vingadores-ultimato', 'loki', 'shang-chi', 'homem-aranha-atraves-do-aranhaverso', 'pantera-negra-wakanda-para-sempre', 'os-vingadores', 'doutor-estranho-no-multiverso-da-loucura', 'capitao-america-novo-mundo', 'thunderbolts', 'quarteto-fantastico', 'capitao-america-o-primeiro-vingador', 'homem-aranha-sem-volta-para-casa', 'deadpool-e-wolverine'];
+                    if (promoKeys.includes(key)) {
+                        card.classList.add('highlight-green');
+                        card.setAttribute('data-highlight', 'green');
+                    }
+
                     const img = document.createElement('img');
                     img.src = posterImg;
                     img.alt = movie.title;
                     img.className = 'marvel-poster-img';
-                    img.width = 200;
-                    img.height = 300;
+                    img.width = 160;
+                    img.height = 240;
                     img.loading = 'lazy';
                     img.onerror = () => posterFallback(img, movie.title);
 
@@ -96,6 +113,7 @@
 
             renderSagaRow(marvelInfinitySaga, 'infinitySagaRow');
             renderSagaRow(marvelMultiverseSaga, 'multiverseSagaRow');
+            renderSagaRow(marvelSeries, 'seriesRow');
 
             // Scroll horizontal com mouse wheel, botões e arrastar
             document.querySelectorAll('.saga-row-wrapper').forEach(wrapper => {
@@ -147,5 +165,3 @@
     </script>
 </body>
 </html>
-
-

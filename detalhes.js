@@ -8,6 +8,16 @@ document.addEventListener('DOMContentLoaded', () => {
         detailAvatar.src = session.avatar;
     }
 
+    // Sincroniza avatar/sessão entre abas
+    window.addEventListener('storage', (e) => {
+        if (e.key === DB.KEYS.SESSION) {
+            const newSession = DB.getSession();
+            if (newSession && detailAvatar) {
+                detailAvatar.src = newSession.avatar;
+            }
+        }
+    });
+
     const DEFAULT_MOVIE_KEY = 'vingadores-doutor-destino';
 
     // ==========================================
@@ -160,7 +170,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const card = document.createElement('a');
             card.href = `detalhes.html?id=${item.key}`;
             card.className = 'suggestion-item-card';
-            card.innerHTML = `<img src="${item.img}" alt="${item.title}">`;
+            const fallbackImg = `https://via.placeholder.com/300x170/1f1f24/d4af37?text=${encodeURIComponent(item.title)}`;
+            card.innerHTML = `<img src="${item.img}" 
+                                 alt="${item.title}" 
+                                 class="loading"
+                                 data-fallback="${fallbackImg}"
+                                 onload="this.classList.remove('loading');"
+                                 onerror="this.onerror=null; this.src=this.dataset.fallback; this.classList.remove('loading'); this.classList.add('error');">`;
             detailSuggestionsGrid.appendChild(card);
         });
     }

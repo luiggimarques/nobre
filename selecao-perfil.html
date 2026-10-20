@@ -1,0 +1,1249 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nobre+ | Quem está assistindo?</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=10">
+    <style>
+        .profile-selection-page {
+            min-height: 100vh;
+            background: var(--bg-dark);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .profile-selection-bg {
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(ellipse at center, rgba(212,175,55,0.08) 0%, transparent 70%),
+                        var(--bg-dark);
+            z-index: -1;
+        }
+
+        .profile-selection-logo {
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        .profile-selection-logo img {
+            height: 80px;
+            filter: drop-shadow(0 4px 20px rgba(212,175,55,0.3));
+        }
+
+        .profile-selection-title {
+            font-family: var(--font-headline);
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 800;
+            color: var(--text-light);
+            text-align: center;
+            margin-bottom: 0.5rem;
+            animation: fadeInUp 0.8s ease-out 0.1s both;
+        }
+
+        .profile-selection-subtitle {
+            color: var(--text-subtle);
+            font-size: 1.1rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        .profiles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1.5rem;
+            max-width: 900px;
+            width: 100%;
+            animation: fadeInUp 0.8s ease-out 0.3s both;
+        }
+
+        .profile-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 1.5rem 1rem;
+            background: var(--bg-card);
+            border: 2px solid var(--border-subtle);
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .profile-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(212,175,55,0.1) 0%, transparent 50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .profile-card:hover {
+            border-color: var(--gold);
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3), 0 0 30px rgba(212,175,55,0.15);
+        }
+
+        .profile-card:hover::before {
+            opacity: 1;
+        }
+
+        .profile-card:focus-visible {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(212,175,55,0.3);
+        }
+
+        .profile-card.add-profile {
+            border-style: dashed;
+            border-color: var(--border-subtle);
+            background: rgba(13,14,18,0.5);
+            color: var(--text-subtle);
+        }
+
+        .profile-card.add-profile:hover {
+            border-color: var(--gold);
+            color: var(--gold);
+            background: rgba(212,175,55,0.05);
+            transform: translateY(-8px);
+        }
+
+        .profile-avatar-wrapper {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin-bottom: 1rem;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+
+        .profile-card:not(.add-profile) .profile-avatar-wrapper {
+            padding: 3px;
+            background: linear-gradient(135deg, var(--gold), #fff099, #8d711d);
+            box-shadow: 0 0 20px rgba(212,175,55,0.3);
+        }
+
+        .profile-card.add-profile .profile-avatar-wrapper {
+            border: 2px dashed var(--border-subtle);
+            background: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .profile-card.add-profile:hover .profile-avatar-wrapper {
+            border-color: var(--gold);
+        }
+
+        .profile-avatar {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+
+        .profile-card:hover .profile-avatar {
+            transform: scale(1.05);
+        }
+
+        .profile-card.add-profile .profile-avatar {
+            display: none;
+        }
+
+        .profile-card.add-profile .add-icon {
+            font-size: 40px;
+            color: var(--text-subtle);
+            transition: color 0.3s, transform 0.3s;
+        }
+
+        .profile-card.add-profile:hover .add-icon {
+            color: var(--gold);
+            transform: scale(1.1);
+        }
+
+        .profile-name {
+            font-family: var(--font-headline);
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-light);
+            margin-bottom: 0.25rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%;
+        }
+
+        .profile-card.add-profile .profile-name {
+            color: var(--gold);
+        }
+
+        .profile-meta {
+            font-size: 0.75rem;
+            color: var(--text-subtle);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 500;
+        }
+
+        .profile-edit-btn {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--gold);
+            border: 2px solid var(--bg-card);
+            color: var(--bg-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.2s;
+            z-index: 10;
+        }
+
+        .profile-card:hover .profile-edit-btn {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .profile-edit-btn:hover {
+            background: #fff099;
+            transform: scale(1.1);
+        }
+
+        .profile-card.add-profile .profile-edit-btn {
+            display: none;
+        }
+
+        .profile-delete-btn {
+            position: absolute;
+            bottom: 8px;
+            left: 8px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(255,68,68,0.9);
+            border: 2px solid var(--bg-card);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.2s;
+            z-index: 10;
+        }
+
+        .profile-card:hover .profile-delete-btn {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .profile-delete-btn:hover {
+            background: #ff4444;
+            transform: scale(1.1);
+        }
+
+        .profile-card.add-profile .profile-delete-btn,
+        .profile-card.main-profile .profile-delete-btn {
+            display: none;
+        }
+
+        .profile-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            font-size: 0.55rem;
+            padding: 0.15rem 0.5rem;
+            border-radius: 999px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            z-index: 5;
+        }
+
+        .profile-badge.kids {
+            background: rgba(76,175,80,0.9);
+            color: white;
+        }
+
+        .profile-badge.main {
+            background: var(--gold);
+            color: var(--bg-dark);
+        }
+
+        .profile-actions-footer {
+            margin-top: 3rem;
+            text-align: center;
+            animation: fadeInUp 0.8s ease-out 0.5s both;
+        }
+
+        .profile-actions-footer .btn-outline {
+            font-size: 0.85rem;
+            padding: 0.75rem 2rem;
+        }
+
+        .profile-lock-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 32px;
+            color: rgba(255,255,255,0.3);
+            pointer-events: none;
+        }
+
+        .profile-card.locked {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .profile-card.locked:hover {
+            transform: none;
+            box-shadow: none;
+            border-color: var(--border-subtle);
+        }
+
+        .profile-card.locked .profile-edit-btn,
+        .profile-card.locked .profile-delete-btn {
+            display: none;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Modal de adicionar/editar perfil */
+        .profile-modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 1rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+        .profile-modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .profile-modal {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 20px;
+            padding: 2rem;
+            width: 100%;
+            max-width: 480px;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: scale(0.9) translateY(20px);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .profile-modal-overlay.active .profile-modal {
+            transform: scale(1) translateY(0);
+        }
+
+        .profile-modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+
+        .profile-modal-header h2 {
+            font-family: var(--font-headline);
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-light);
+        }
+
+        .profile-modal-close {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .profile-modal-close:hover {
+            background: var(--gold);
+            color: var(--bg-dark);
+            border-color: var(--gold);
+        }
+
+        .profile-form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .profile-form-group label {
+            display: block;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-subtle);
+            font-weight: 700;
+            font-family: var(--font-label);
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-form-group input,
+        .profile-form-group select {
+            width: 100%;
+            padding: 0.85rem 1rem;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-subtle);
+            border-radius: 10px;
+            color: var(--text-light);
+            font-size: 0.95rem;
+            font-family: var(--font-body);
+            transition: all 0.2s;
+        }
+
+        .profile-form-group input:focus,
+        .profile-form-group select:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(212,175,55,0.15);
+        }
+
+        .profile-avatar-picker {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .profile-avatar-preview {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            padding: 3px;
+            background: linear-gradient(135deg, var(--gold), #fff099, #8d711d);
+            flex-shrink: 0;
+        }
+
+        .profile-avatar-preview img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .profile-avatar-preview .edit-overlay {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-subtle);
+            color: var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .avatar-options-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .avatar-option {
+            aspect-ratio: 1;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px solid var(--border-subtle);
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .avatar-option:hover {
+            border-color: var(--gold);
+            transform: scale(1.05);
+        }
+
+        .avatar-option.selected {
+            border-color: var(--gold);
+            box-shadow: 0 0 0 2px var(--gold), 0 0 20px rgba(212,175,55,0.3);
+        }
+
+        .avatar-option img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .avatar-option .checkmark {
+            position: absolute;
+            bottom: 4px;
+            right: 4px;
+            width: 20px;
+            height: 20px;
+            background: var(--gold);
+            color: var(--bg-dark);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.2s;
+        }
+
+        .avatar-option.selected .checkmark {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .profile-modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.75rem;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        .profile-modal-actions .btn-outline,
+        .profile-modal-actions .btn-gold {
+            padding: 0.75rem 1.5rem;
+            font-size: 0.85rem;
+        }
+
+        .age-rating-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .age-chip {
+            padding: 0.5rem 1rem;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-subtle);
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .age-chip:hover {
+            border-color: var(--gold);
+        }
+
+        .age-chip.selected {
+            background: var(--gold);
+            border-color: var(--gold);
+            color: var(--bg-dark);
+        }
+
+        .toggle-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 0;
+        }
+
+        .toggle-info label {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-light);
+            margin-bottom: 0.25rem;
+            display: block;
+        }
+
+        .toggle-info p {
+            font-size: 0.75rem;
+            color: var(--text-subtle);
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 52px;
+            height: 28px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-switch .slider {
+            position: absolute;
+            cursor: pointer;
+            inset: 0;
+            background: var(--border-subtle);
+            border-radius: 28px;
+            transition: 0.3s;
+        }
+
+        .toggle-switch .slider::before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 4px;
+            bottom: 4px;
+            background: white;
+            border-radius: 50%;
+            transition: 0.3s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .toggle-switch input:checked + .slider {
+            background: var(--gold);
+        }
+
+        .toggle-switch input:checked + .slider::before {
+            transform: translateX(24px);
+        }
+
+        /* Toast notification */
+        .profile-toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            z-index: 2000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .profile-toast.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .profile-toast.success {
+            border-color: #34d399;
+        }
+
+        .profile-toast.error {
+            border-color: #ef4444;
+        }
+
+        @media (max-width: 600px) {
+            .profiles-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+
+            .profile-avatar-wrapper {
+                width: 90px;
+                height: 90px;
+            }
+
+            .avatar-options-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-selection-bg"></div>
+
+    <main class="profile-selection-page">
+        <div class="profile-selection-logo">
+            <img src="images/nobre-logo.png" alt="Nobre+">
+        </div>
+
+        <h1 class="profile-selection-title">Quem está assistindo?</h1>
+        <p class="profile-selection-subtitle">Selecione seu perfil para continuar</p>
+
+        <div class="profiles-grid" id="profilesGrid"></div>
+
+        <div class="profile-actions-footer">
+            <button class="btn-outline" id="backToLoginBtn">
+                <span class="material-symbols-outlined" style="font-size:16px;vertical-align:middle;">logout</span>
+                Trocar de conta
+            </button>
+        </div>
+    </main>
+
+    <!-- Modal Adicionar/Editar Perfil -->
+    <div class="profile-modal-overlay" id="profileModal">
+        <div class="profile-modal" role="dialog" aria-labelledby="modalTitle" aria-modal="true">
+            <div class="profile-modal-header">
+                <h2 id="modalTitle">Adicionar Perfil</h2>
+                <button class="profile-modal-close" id="modalCloseBtn" aria-label="Fechar">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+
+            <form id="profileForm">
+                <div class="profile-form-group">
+                    <label>Nome do Perfil</label>
+                    <input type="text" id="profileNameInput" placeholder="Ex: Luiggi, Andre, Crianças..." required maxlength="20" autocomplete="off">
+                </div>
+
+                <div class="profile-form-group">
+                    <label>Avatar</label>
+                    <div class="profile-avatar-picker">
+                        <div class="profile-avatar-preview" id="avatarPreview">
+                            <img id="avatarPreviewImg" src="" alt="Avatar preview">
+                            <span class="edit-overlay" id="openAvatarPickerBtn">
+                                <span class="material-symbols-outlined">edit</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Grid de avatares pré-definidos -->
+                <div class="avatar-options-grid" id="avatarOptionsGrid" style="display:none;"></div>
+
+                <div class="profile-form-group">
+                    <label>Classificação Etária</label>
+                    <div class="age-rating-chips" id="ageRatingChips">
+                        <span class="age-chip" data-rating="L">Livre</span>
+                        <span class="age-chip" data-rating="10">10</span>
+                        <span class="age-chip" data-rating="12">12</span>
+                        <span class="age-chip" data-rating="14">14</span>
+                        <span class="age-chip" data-rating="16">16</span>
+                        <span class="age-chip" data-rating="18">18</span>
+                    </div>
+                </div>
+
+                <div class="profile-form-group">
+                    <label>Idioma</label>
+                    <select id="profileLanguageSelect">
+                        <option value="pt-BR">Português (Brasil)</option>
+                        <option value="en-US">English (US)</option>
+                        <option value="es-ES">Español</option>
+                    </select>
+                </div>
+
+                <div class="toggle-row">
+                    <div class="toggle-info">
+                        <label>Perfil Infantil</label>
+                        <p>Conteúdo apenas para crianças, interface simplificada</p>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="profileKidsToggle">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="profile-modal-actions">
+                    <button type="button" class="btn-outline" id="modalCancelBtn">Cancelar</button>
+                    <button type="submit" class="btn-gold" id="modalSaveBtn">
+                        <span class="material-symbols-outlined" style="font-size:16px;vertical-align:middle;">save</span>
+                        Salvar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="profile-toast" id="profileToast" role="alert" aria-live="polite"></div>
+
+    <script src="theme.js?v=5"></script>
+    <script src="movies-data.js?v=10"></script>
+    <script src="database.js?v=5"></script>
+    <script>
+        // ==========================================
+        // SELEÇÃO DE PERFIL - Nobre+
+        // ==========================================
+        (function() {
+            'use strict';
+
+            const $ = (id) => document.getElementById(id);
+            const MAX_PROFILES = 5;
+
+            // Estado
+            let currentUser = null;
+            let profiles = [];
+            let editingProfileId = null;
+            let selectedAvatar = null;
+            let selectedAgeRating = '12';
+
+            // Elementos
+            const profilesGrid = $('profilesGrid');
+            const profileModal = $('profileModal');
+            const profileForm = $('profileForm');
+            const modalTitle = $('modalTitle');
+            const profileNameInput = $('profileNameInput');
+            const avatarPreviewImg = $('avatarPreviewImg');
+            const avatarOptionsGrid = $('avatarOptionsGrid');
+            const ageRatingChips = $('ageRatingChips');
+            const profileLanguageSelect = $('profileLanguageSelect');
+            const profileKidsToggle = $('profileKidsToggle');
+            const modalCloseBtn = $('modalCloseBtn');
+            const modalCancelBtn = $('modalCancelBtn');
+            const modalSaveBtn = $('modalSaveBtn');
+            const openAvatarPickerBtn = $('openAvatarPickerBtn');
+            const backToLoginBtn = $('backToLoginBtn');
+            const profileToast = $('profileToast');
+
+            // Avatares pré-definidos organizados por categoria
+            const AVATAR_OPTIONS = [
+                // Destaques / Personalizado
+                { name: 'Personalizado', src: 'custom', category: 'Destaques' },
+                { name: 'Mandalorian', src: 'images/mandalorian.jpg', category: 'Destaques' },
+                { name: 'Grogu', src: 'images/babyyodaperfil.jpg', category: 'Destaques' },
+                { name: 'Homem de Ferro', src: 'images/homendeferroperfil.jpg', category: 'Destaques' },
+                { name: 'Capitão América', src: 'images/capitaoamericaperfil.jpg', category: 'Destaques' },
+                { name: 'Mufasa', src: 'images/mufasaperfil.jpg', category: 'Destaques' },
+                { name: 'Akaza', src: 'images/akazaperfil.jpg', category: 'Destaques' },
+                { name: 'Moana', src: 'images/moanaperfil.jpg', category: 'Destaques' },
+
+                // Star Wars
+                { name: 'Darth Vader', src: 'images/darthperfil.jpg', category: 'Star Wars' },
+                { name: 'Luke Skywalker', src: 'images/lukeperfil.jpg', category: 'Star Wars' },
+                { name: 'Chewbacca', src: 'images/chewbaccaperfil.jpg', category: 'Star Wars' },
+                { name: 'R2-D2', src: 'images/r2d2perfil.jpg', category: 'Star Wars' },
+
+                // Marvel
+                { name: 'Doutor Estranho', src: 'images/drestranhoperfil.jpg', category: 'Marvel' },
+                { name: 'Hulk', src: 'images/hulkperfil.jpg', category: 'Marvel' },
+                { name: 'Thor', src: 'images/thorperfil.jpg', category: 'Marvel' },
+                { name: 'Pantera Negra', src: 'images/paneranegraperfil.jpg', category: 'Marvel' },
+                { name: 'Viúva Negra', src: 'images/blackwindowperfil.jpg', category: 'Marvel' },
+                { name: 'Gavião Arqueiro', src: 'images/gaviaoarqueiroperfil.jpg', category: 'Marvel' },
+                { name: 'Dr. Doom', src: 'images/drdoomperfil.jpg', category: 'Marvel' },
+
+                // Disney & Pixar
+                { name: 'Mickey', src: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d4/Mickey_Mouse.png/250px-Mickey_Mouse.png', category: 'Disney' },
+                { name: 'Toy Story', src: 'images/toystory.jpg', category: 'Disney' },
+                { name: 'Carros', src: 'images/carros.jpg', category: 'Disney' },
+                { name: 'Zootopia', src: 'images/zotopia.jpg', category: 'Disney' },
+                { name: 'Mufasa', src: 'images/mufasaperfil.jpg', category: 'Disney' },
+                { name: 'Moana 2', src: 'images/moana2.jpg', category: 'Disney' },
+            ];
+
+            // Inicialização
+            document.addEventListener('DOMContentLoaded', init);
+
+            async function init() {
+                // Verifica sessão
+                const session = DB.getSession();
+                if (!session || !session.userId) {
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                currentUser = session;
+                profiles = DB.getProfiles(currentUser.userId);
+
+                renderProfiles();
+                setupEventListeners();
+                setupAvatarOptions();
+                setupAgeRatingChips();
+            }
+
+            function setupEventListeners() {
+                // Botão voltar para login
+                backToLoginBtn.addEventListener('click', () => {
+                    DB.logout();
+                    window.location.href = 'login.html';
+                });
+
+                // Modal
+                modalCloseBtn.addEventListener('click', closeModal);
+                modalCancelBtn.addEventListener('click', closeModal);
+                profileModal.addEventListener('click', (e) => {
+                    if (e.target === profileModal) closeModal();
+                });
+
+                // Formulário
+                profileForm.addEventListener('submit', handleProfileSubmit);
+
+                // Seletor de avatar
+                openAvatarPickerBtn.addEventListener('click', toggleAvatarPicker);
+
+                // Fechar modal com Escape
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape' && profileModal.classList.contains('active')) {
+                        closeModal();
+                    }
+                });
+            }
+
+            function renderProfiles() {
+                profilesGrid.innerHTML = '';
+
+                // Renderiza perfis existentes
+                profiles.forEach((profile, index) => {
+                    const card = createProfileCard(profile, index);
+                    profilesGrid.appendChild(card);
+                });
+
+                // Botão adicionar perfil (se não atingiu o limite)
+                if (profiles.length < MAX_PROFILES) {
+                    const addCard = createAddProfileCard();
+                    profilesGrid.appendChild(addCard);
+                }
+            }
+
+            function createProfileCard(profile, index) {
+                const card = document.createElement('button');
+                card.type = 'button';
+                card.className = 'profile-card' + (profile.isMain ? ' main-profile' : '');
+                card.setAttribute('data-profile-id', profile.id);
+                card.setAttribute('aria-label', `Entrar como ${profile.name}`);
+
+                // Badge de perfil principal ou infantil
+                let badgeHtml = '';
+                if (profile.isMain) {
+                    badgeHtml = '<span class="profile-badge main">Principal</span>';
+                } else if (profile.isKids) {
+                    badgeHtml = '<span class="profile-badge kids">Infantil</span>';
+                }
+
+                card.innerHTML = `
+                    ${badgeHtml}
+                    <div class="profile-avatar-wrapper">
+                        <img class="profile-avatar" src="${profile.avatar}" alt="${profile.name}" loading="lazy">
+                    </div>
+                    <span class="profile-name">${escapeHtml(profile.name)}</span>
+                    <span class="profile-meta">${profile.ageRating}+ ${profile.isKids ? '• Infantil' : ''}</span>
+                    <button class="profile-edit-btn" aria-label="Editar ${profile.name}" data-action="edit">
+                        <span class="material-symbols-outlined" style="font-size:16px;">edit</span>
+                    </button>
+                    ${!profile.isMain ? `
+                        <button class="profile-delete-btn" aria-label="Excluir ${profile.name}" data-action="delete">
+                            <span class="material-symbols-outlined" style="font-size:16px;">delete</span>
+                        </button>
+                    ` : ''}
+                `;
+
+                // Clique no card -> seleciona perfil
+                card.addEventListener('click', (e) => {
+                    // Não faz nada se clicou nos botões de editar/excluir
+                    if (e.target.closest('.profile-edit-btn') || e.target.closest('.profile-delete-btn')) return;
+                    selectProfile(profile.id);
+                });
+
+                // Botão editar
+                card.querySelector('.profile-edit-btn')?.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    openEditModal(profile);
+                });
+
+                // Botão excluir
+                card.querySelector('.profile-delete-btn')?.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    confirmDeleteProfile(profile);
+                });
+
+                return card;
+            }
+
+            function createAddProfileCard() {
+                const card = document.createElement('button');
+                card.type = 'button';
+                card.className = 'profile-card add-profile';
+                card.setAttribute('aria-label', 'Adicionar novo perfil');
+
+                card.innerHTML = `
+                    <div class="profile-avatar-wrapper">
+                        <span class="add-icon material-symbols-outlined">add</span>
+                    </div>
+                    <span class="profile-name">Adicionar Perfil</span>
+                    <span class="profile-meta">Até ${MAX_PROFILES} perfis</span>
+                `;
+
+                card.addEventListener('click', () => openAddModal());
+                return card;
+            }
+
+            function selectProfile(profileId) {
+                const result = DB.setActiveProfile(profileId);
+                if (result.success) {
+                    showToast(`Entrando como ${result.profile.name}...`, 'success');
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 800);
+                } else {
+                    showToast(result.message, 'error');
+                }
+            }
+
+            // ==========================================
+            // MODAL ADICIONAR/EDITAR PERFIL
+            // ==========================================
+            function openAddModal() {
+                editingProfileId = null;
+                modalTitle.textContent = 'Adicionar Perfil';
+                profileForm.reset();
+                profileNameInput.value = '';
+                selectedAvatar = null;
+                selectedAgeRating = '12';
+                profileLanguageSelect.value = 'pt-BR';
+                profileKidsToggle.checked = false;
+
+                // Avatar padrão (gerado pelo nome ou genérico)
+                avatarPreviewImg.src = `https://ui-avatars.com/api/?name=NO&background=d4af37&color=121317&bold=true&size=128`;
+                updateAgeRatingChips();
+                avatarOptionsGrid.style.display = 'none';
+
+                profileModal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+                setTimeout(() => profileNameInput.focus(), 100);
+            }
+
+            function openEditModal(profile) {
+                editingProfileId = profile.id;
+                modalTitle.textContent = 'Editar Perfil';
+                profileNameInput.value = profile.name;
+                selectedAvatar = profile.avatar;
+                selectedAgeRating = profile.ageRating.replace('+', '');
+                profileLanguageSelect.value = profile.language || 'pt-BR';
+                profileKidsToggle.checked = profile.isKids || false;
+
+                avatarPreviewImg.src = profile.avatar;
+                updateAgeRatingChips();
+                avatarOptionsGrid.style.display = 'none';
+
+                profileModal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+                setTimeout(() => profileNameInput.focus(), 100);
+            }
+
+            function closeModal() {
+                profileModal.classList.remove('active');
+                document.body.style.overflow = '';
+                editingProfileId = null;
+                selectedAvatar = null;
+                avatarOptionsGrid.style.display = 'none';
+            }
+
+            function toggleAvatarPicker() {
+                const isVisible = avatarOptionsGrid.style.display !== 'none';
+                avatarOptionsGrid.style.display = isVisible ? 'none' : 'grid';
+            }
+
+            function setupAvatarOptions() {
+                avatarOptionsGrid.innerHTML = '';
+
+                AVATAR_OPTIONS.forEach((avatar, index) => {
+                    const option = document.createElement('button');
+                    option.type = 'button';
+                    option.className = 'avatar-option';
+                    option.setAttribute('data-index', index);
+                    option.setAttribute('aria-label', `Selecionar avatar ${avatar.name}`);
+
+                    if (avatar.src === 'custom') {
+                        option.innerHTML = `
+                            <div style="width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.5rem;background:linear-gradient(135deg,#1f1f24,#2a2a34);color:var(--gold);">
+                                <span class="material-symbols-outlined" style="font-size:28px;">photo_camera</span>
+                                <span style="font-size:0.65rem;font-weight:600;text-align:center;">Carregar<br>Foto</span>
+                            </div>
+                        `;
+                    } else {
+                        option.innerHTML = `<img src="${avatar.src}" alt="${avatar.name}" loading="lazy">`;
+                    }
+
+                    option.innerHTML += '<span class="checkmark"><span class="material-symbols-outlined">check</span></span>';
+
+                    option.addEventListener('click', () => selectAvatarOption(index, option));
+                    avatarOptionsGrid.appendChild(option);
+                });
+            }
+
+            function selectAvatarOption(index, optionEl) {
+                const avatar = AVATAR_OPTIONS[index];
+
+                if (avatar.src === 'custom') {
+                    // Abre input de arquivo
+                    const input = document.createElement('input');
+                    input.type = 'file';
+                    input.accept = 'image/*';
+                    input.style.display = 'none';
+                    input.addEventListener('change', (e) => {
+                        const file = e.target.files[0];
+                        if (file) {
+                            const reader = new FileReader();
+                            reader.onload = (ev) => {
+                                selectedAvatar = ev.target.result;
+                                avatarPreviewImg.src = selectedAvatar;
+                                avatarOptionsGrid.style.display = 'none';
+                                updateAvatarSelectionUI();
+                            };
+                            reader.readAsDataURL(file);
+                        }
+                    });
+                    document.body.appendChild(input);
+                    input.click();
+                    document.body.removeChild(input);
+                    return;
+                }
+
+                selectedAvatar = avatar.src;
+                avatarPreviewImg.src = selectedAvatar;
+                updateAvatarSelectionUI();
+                avatarOptionsGrid.style.display = 'none';
+            }
+
+            function updateAvatarSelectionUI() {
+                document.querySelectorAll('.avatar-option').forEach((opt, i) => {
+                    opt.classList.toggle('selected', AVATAR_OPTIONS[i].src === selectedAvatar);
+                });
+            }
+
+            function setupAgeRatingChips() {
+                ageRatingChips.querySelectorAll('.age-chip').forEach(chip => {
+                    chip.addEventListener('click', () => {
+                        ageRatingChips.querySelectorAll('.age-chip').forEach(c => c.classList.remove('selected'));
+                        chip.classList.add('selected');
+                        selectedAgeRating = chip.dataset.rating;
+                    });
+                });
+            }
+
+            function updateAgeRatingChips() {
+                ageRatingChips.querySelectorAll('.age-chip').forEach(chip => {
+                    chip.classList.toggle('selected', chip.dataset.rating === selectedAgeRating);
+                });
+            }
+
+            async function handleProfileSubmit(e) {
+                e.preventDefault();
+
+                const name = profileNameInput.value.trim();
+                if (!name) {
+                    showToast('Digite um nome para o perfil', 'error');
+                    profileNameInput.focus();
+                    return;
+                }
+
+                if (name.length < 2) {
+                    showToast('O nome deve ter pelo menos 2 caracteres', 'error');
+                    profileNameInput.focus();
+                    return;
+                }
+
+                // Verifica duplicatas (exceto o próprio perfil em edição)
+                const isDuplicate = profiles.some(p => 
+                    p.name.toLowerCase() === name.toLowerCase() && p.id !== editingProfileId
+                );
+                if (isDuplicate) {
+                    showToast('Já existe um perfil com este nome', 'error');
+                    profileNameInput.focus();
+                    return;
+                }
+
+                const avatar = selectedAvatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=d4af37&color=121317&bold=true&size=128`;
+                const ageRating = selectedAgeRating + '+';
+                const isKids = profileKidsToggle.checked;
+
+                let result;
+                if (editingProfileId) {
+                    result = DB.updateProfile(editingProfileId, {
+                        name,
+                        avatar,
+                        ageRating,
+                        language: profileLanguageSelect.value,
+                        isKids
+                    });
+                } else {
+                    result = DB.createProfile(currentUser.userId, {
+                        name,
+                        avatar,
+                        ageRating,
+                        language: profileLanguageSelect.value,
+                        isKids
+                    });
+                }
+
+                if (result.success) {
+                    showToast(editingProfileId ? 'Perfil atualizado!' : 'Perfil criado!', 'success');
+                    profiles = DB.getProfiles(currentUser.userId);
+                    renderProfiles();
+                    closeModal();
+                } else {
+                    showToast(result.message, 'error');
+                }
+            }
+
+            function confirmDeleteProfile(profile) {
+                if (confirm(`Tem certeza que deseja excluir o perfil "${profile.name}"?\n\nIsso removerá o histórico e preferências deste perfil permanentemente.`)) {
+                    const result = DB.deleteProfile(currentUser.userId, profile.id);
+                    if (result.success) {
+                        showToast('Perfil excluído', 'success');
+                        profiles = DB.getProfiles(currentUser.userId);
+                        renderProfiles();
+                    } else {
+                        showToast(result.message, 'error');
+                    }
+                }
+            }
+
+            function showToast(message, type = 'success') {
+                profileToast.textContent = message;
+                profileToast.className = 'profile-toast ' + type;
+                profileToast.classList.add('show');
+
+                clearTimeout(profileToast._timer);
+                profileToast._timer = setTimeout(() => {
+                    profileToast.classList.remove('show');
+                }, 3000);
+            }
+
+            function escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+        })();
+    </script>
+</body>
+</html>

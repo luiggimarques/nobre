@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -13,7 +13,7 @@
 </head>
 <body class="detail-page-body">
 
-    <!-- NAVEGAÇÃO SUPERIOR -->
+    <!-- NAVEGACAO SUPERIOR -->
     <nav class="navbar">
         <div class="nav-left">
             <a href="index.html" class="logo-link" title="Nobre+"><img src="images/nobre-logo.png" alt="Nobre+" class="nav-brand-logo"></a>
@@ -22,63 +22,75 @@
                 <li><a href="#"><span class="material-symbols-outlined">search</span> PESQUISA</a></li>
                 <li><a href="#"><span class="material-symbols-outlined">add</span> MINHA LISTA</a></li>
                 <li><a href="#"><span class="material-symbols-outlined">movie</span> FILMES</a></li>
-                <li><a href="#"><span class="material-symbols-outlined">tv</span> SÉRIES</a></li>
+                <li><a href="#"><span class="material-symbols-outlined">tv</span> SERIES</a></li>
                 <li><a href="#"><span class="material-symbols-outlined">star</span> ORIGINAIS</a></li>
             </ul>
         </div>
         <div class="nav-right">
-            <a href="index.html" class="back-home-btn"><span class="material-symbols-outlined">arrow_back</span> Voltar ao Início</a>
+            <a href="index.html" class="back-home-btn"><span class="material-symbols-outlined">arrow_back</span> Voltar ao Inicio</a>
             <img src="" alt="Perfil" class="profile-avatar" id="detailAvatar">
         </div>
     </nav>
 
-    <!-- PÁGINA DE DETALHES -->
+    <!-- PAGINA DE DETALHES -->
     <main class="detail-main">
         <!-- HERO BANNER FULLSCREEN -->
         <section class="detail-hero-section">
-            <img src="images/logo1.jpg" alt="Banner do Filme" class="detail-hero-bg" id="detailHeroImg">
+            <img src="images/logo1.jpg" 
+                 alt="Banner do Filme" 
+                 class="detail-hero-bg loading"
+                 id="detailHeroImg"
+                 data-fallback="https://via.placeholder.com/1920x800/121317/d4af37?text=Banner+do+Filme"
+                 onload="this.classList.remove('loading');"
+                 onerror="this.onerror=null; this.src=this.dataset.fallback; this.classList.remove('loading'); this.classList.add('error');">
             <div class="detail-hero-overlay"></div>
             
             <div class="detail-hero-content">
                 <span class="detail-badge-tag" id="detailBadgeTag">Trailer</span>
                 
-                <!-- Logo ou Título do Filme -->
-                <img src="images/logo2.png" alt="Logo do Filme" class="detail-movie-logo" id="detailMovieLogo">
+                <!-- Logo ou Titulo do Filme -->
+                <img src="images/logo2.png" 
+                     alt="Logo do Filme" 
+                     class="detail-movie-logo loading"
+                     id="detailMovieLogo"
+                     data-fallback="https://via.placeholder.com/400x150/1f1f24/d4af37?text=Logo+do+Filme"
+                     onload="this.classList.remove('loading'); this.style.display='block'; if(document.getElementById('detailMovieTitle')) document.getElementById('detailMovieTitle').style.display='none';"
+                     onerror="this.onerror=null; this.src=this.dataset.fallback; this.classList.remove('loading'); this.classList.add('error'); this.style.display='block'; if(document.getElementById('detailMovieTitle')) document.getElementById('detailMovieTitle').style.display='none';">
                 <h1 class="detail-movie-title" id="detailMovieTitle" style="display: none;">Vingadores: Doutor Destino</h1>
                 
-                <p class="detail-tagline" id="detailTagline">Trailer da estreia no cinema já disponível</p>
+                <p class="detail-tagline" id="detailTagline">Trailer da estreia no cinema ja disponivel</p>
                 
                 <div class="detail-meta-row">
                     <span class="badge-age r14" id="detailAgeBadge">14+</span>
                     <span class="badge-res" id="detailResBadge">4K HDR</span>
-                    <span class="detail-genre" id="detailGenre">Super-Heróis, Ação e aventura</span>
+                    <span class="detail-genre" id="detailGenre">Super-Herois, Acao e aventura</span>
                 </div>
 
                 <p class="detail-description" id="detailDescription">
-                    Prepare-se para "Vingadores: Doutor Destino" da Marvel Studios, em dezembro de 2026, só nos cinemas.
+                    Prepare-se para "Vingadores: Doutor Destino" da Marvel Studios, em dezembro de 2026, so nos cinemas.
                 </p>
 
-                <!-- BOTÕES DE AÇÃO -->
+                <!-- BOTOES DE ACAO -->
                 <div class="detail-action-buttons">
                     <button class="btn-play-trailer" id="detailPlayTrailerBtn">
                         <span class="material-symbols-outlined filled">play_arrow</span> TRAILER
                     </button>
-                    <button class="btn-add-list" id="detailAddListBtn" title="Adicionar à Minha Lista">
+                    <button class="btn-add-list" id="detailAddListBtn" title="Adicionar a Minha Lista">
                         <span class="material-symbols-outlined">add</span>
                     </button>
                 </div>
             </div>
         </section>
 
-        <!-- SEÇÃO DE ABAS (SUGESTÕES, EXTRAS, DETALHES) -->
+        <!-- SECAO DE ABAS (SUGESTOES, EXTRAS, DETALHES) -->
         <section class="detail-tabs-section">
             <div class="detail-tabs-nav">
-                <button class="detail-tab-btn active" data-tab="sugestoes">SUGESTÕES</button>
+                <button class="detail-tab-btn active" data-tab="sugestoes">SUGESTOES</button>
                 <button class="detail-tab-btn" data-tab="extras">EXTRAS</button>
                 <button class="detail-tab-btn" data-tab="detalhes">DETALHES</button>
             </div>
 
-            <!-- CONTEÚDO DAS ABAS -->
+            <!-- CONTEUDO DAS ABAS -->
             <div class="detail-tab-pane active" id="tab-sugestoes">
                 <div class="detail-suggestions-grid" id="detailSuggestionsGrid">
                     <!-- Cards preenchidos dinamicamente por JS -->
@@ -88,26 +100,26 @@
             <div class="detail-tab-pane" id="tab-extras">
                 <div class="detail-extras-empty">
                     <span class="material-symbols-outlined" style="font-size: 3rem;">movie</span>
-                    <p>Nenhum extra ou cena de bastidores disponível no momento.</p>
+                    <p>Nenhum extra ou cena de bastidores disponivel no momento.</p>
                 </div>
             </div>
 
             <div class="detail-tab-pane" id="tab-detalhes">
                 <div class="detail-info-grid">
                     <div class="info-card">
-                        <h4>Duração</h4>
+                        <h4>Duracao</h4>
                         <p id="detailDuration">2h 45min</p>
                     </div>
                     <div class="info-card">
-                        <h4>Data de Lançamento</h4>
+                        <h4>Data de Lancamento</h4>
                         <p id="detailRelease">Dezembro de 2026</p>
                     </div>
                     <div class="info-card">
-                        <h4>Gênero</h4>
-                        <p id="detailGenreFull">Ação, Aventura, Ficção Científica</p>
+                        <h4>Genero</h4>
+                        <p id="detailGenreFull">Acao, Aventura, Ficcao Cientifica</p>
                     </div>
                     <div class="info-card">
-                        <h4>Direção</h4>
+                        <h4>Direcao</h4>
                         <p id="detailDirector">Anthony e Joe Russo</p>
                     </div>
                     <div class="info-card">
@@ -115,7 +127,7 @@
                         <p id="detailCast">Robert Downey Jr., Pedro Pascal, Vanessa Kirby, Benedict Cumberbatch</p>
                     </div>
                     <div class="info-card">
-                        <h4>Classificação Indicativa</h4>
+                        <h4>Classificacao Indicativa</h4>
                         <p id="detailRating">14 anos</p>
                     </div>
                 </div>
@@ -123,7 +135,7 @@
         </section>
     </main>
 
-    <!-- MODAL DE VÍDEO DO TRAILER FULLSCREEN -->
+    <!-- MODAL DE VIDEO DO TRAILER FULLSCREEN -->
     <div class="trailer-modal" id="trailerModal">
         <div class="trailer-modal-content">
             <button class="trailer-close-btn" id="trailerCloseBtn" aria-label="Fechar"><span class="material-symbols-outlined">close</span></button>
@@ -133,9 +145,8 @@
 
     <!-- SCRIPTS -->
     <script src="theme.js?v=5"></script>
-    <script src="movies-data.js?v=10"></script>
+    <script src="movies-data.js?v=13"></script>
     <script src="database.js?v=5"></script>
     <script src="detalhes.js"></script>
 </body>
 </html>
-
